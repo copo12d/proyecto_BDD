@@ -1,1 +1,3 @@
-buenas noches 
+1. Adiestrarnos en Github/Git
+2. Carlos - Modelo de Análisis
+3. Angel - Ingeniería de Requisitos
