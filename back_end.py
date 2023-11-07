@@ -12,7 +12,7 @@ try:
     )
     cursor = conn.cursor()
 except Error as ex:
-    exit('ocurrio un error ',ex)
+    print("Hubo un erro",ex)
 finally:
     cursor.close()
     conn.close()
