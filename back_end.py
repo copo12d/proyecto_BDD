@@ -1,15 +1,24 @@
 import mysql.connector
+from mysql.connector import Error
+from sys import exit
 
 # Configura la conexión a la base de datos
-conn = mysql.connector.connect(
-    host="127.0.0.1",
-    user="root",
-    password="30412187",
-    database="tu_base_de_datos"
-)
-
+try:
+    conn = mysql.connector.connect(
+        host="127.0.0.1",
+        user="root",
+        password="30412187",
+        database="tu_base_de_datos"
+    )
+    cursor = conn.cursor()
+except Error as ex:
+    exit('ocurrio un error ',ex)
+finally:
+    cursor.close()
+    conn.close()
+    
 # Crea un cursor para interactuar con la base de datos
-cursor = conn.cursor()
+
 
 # Función para insertar datos
 def insertar_datos(nombre, edad):
@@ -32,12 +41,8 @@ def borrar_datos(id):
     cursor.execute(sql, val)
     conn.commit()
 
-# Ejemplo de uso
-insertar_datos("Ejemplo1", 25)
-actualizar_datos(1, "NuevoNombre", 30)
-borrar_datos(1)
+
 
 # Cierra el cursor y la conexión a la base de datos
-cursor.close()
-conn.close()
+
 
