@@ -1,1 +1,1 @@
-print("A")
+print("Lo lograron. Finalmente lo rompieron. Finalmente ganaron. Destrozaron a alguien. Alguien que siempre estaba feliz, que siempre estaba sonriendo. Alguien que no merecía el odio. Alguien que no hacia nada más que ayudar a las personas. Alguien que amó con todo su corazón.")
