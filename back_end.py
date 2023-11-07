@@ -1,1 +1,43 @@
-print("Lo lograron. Finalmente lo rompieron. Finalmente ganaron. Destrozaron a alguien. Alguien que siempre estaba feliz, que siempre estaba sonriendo. Alguien que no merecía el odio. Alguien que no hacia nada más que ayudar a las personas. Alguien que amó con todo su corazón.")
+import mysql.connector
+
+# Configura la conexión a la base de datos
+conn = mysql.connector.connect(
+    host="127.0.0.1",
+    user="root",
+    password="30412187",
+    database="tu_base_de_datos"
+)
+
+# Crea un cursor para interactuar con la base de datos
+cursor = conn.cursor()
+
+# Función para insertar datos
+def insertar_datos(nombre, edad):
+    sql = "INSERT INTO tabla_ejemplo (nombre, edad) VALUES (%s, %s)"
+    val = (nombre, edad)
+    cursor.execute(sql, val)
+    conn.commit()
+
+# Función para actualizar datos
+def actualizar_datos(id, nuevo_nombre, nueva_edad):
+    sql = "UPDATE tabla_ejemplo SET nombre = %s, edad = %s WHERE id = %s"
+    val = (nuevo_nombre, nueva_edad, id)
+    cursor.execute(sql, val)
+    conn.commit()
+
+# Función para borrar datos
+def borrar_datos(id):
+    sql = "DELETE FROM tabla_ejemplo WHERE id = %s"
+    val = (id,)
+    cursor.execute(sql, val)
+    conn.commit()
+
+# Ejemplo de uso
+insertar_datos("Ejemplo1", 25)
+actualizar_datos(1, "NuevoNombre", 30)
+borrar_datos(1)
+
+# Cierra el cursor y la conexión a la base de datos
+cursor.close()
+conn.close()
+
