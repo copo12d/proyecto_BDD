@@ -1,1 +1,5 @@
-buenas noches 
+1. Adiestrarnos en Github/Git
+2. Carlos - Modelo de Análisis
+3. Angel - Ingeniería de Requisitos
+4. Tirar código
+4.1 Aprender Tkinder (entre otras cosas)
