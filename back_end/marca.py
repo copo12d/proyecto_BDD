@@ -3,18 +3,18 @@ class Marca:
     def __init__(self, db):
         self.db = db
 
-    def insert(self,nombre_marca):
-        sql = "INSERT INTO modelo (nombre) VALUES (%s)"
-        self.db.cursor.execute(sql, (nombre_marca))
+    def insert(self,nombre_marca,idMarca):
+        sql = "INSERT INTO marca VALUES (%s,%s)"
+        self.db.cursor.execute(sql,(idMarca,nombre_marca))
         self.db.commit()
           
 
-    def update(self, id, nuevo_nombre_marca):
-         sql = "UPDATE marca SET nombre = %s WHERE id = %s"
-         self.db.cursor.execute(sql, (nuevo_nombre_marca, id))
+    def update(self, Nombre_Marca,idMarca):
+         sql = "UPDATE marca SET Nombre_Marca = %s WHERE idMarca = %s"
+         self.db.cursor.execute(sql, (Nombre_Marca,idMarca))
          self.db.commit()
 
-    def delete(self, id):
-         sql = "DELETE FROM marca WHERE id = %s"
-         self.db.cursor.execute(sql, (id))
+    def delete(self, idMarca):
+         sql = "DELETE FROM marca WHERE idMarca = %s"
+         self.db.cursor.execute(sql, (idMarca,))
          self.db.commit()

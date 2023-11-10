@@ -10,21 +10,26 @@ class Database:
                 password=password,
                 database=database
             )
-            self.cursor = self.conn.cursor()
+            if self.conn.is_connected:
+                print("conexion exitosa")
+                self.cursor = self.conn.cursor()
         except Error as ex:
-            print("connection faild:",ex)
+            print("la conecxion fallo:",ex)
 
     def close_connection(self):
-        self.cursor.close()
-        self.conn.close()
-
+        try:
+            if self.conn.is_connected:
+                self.cursor.close()
+                self.conn.close()
+        except Error as ex:
+            print(f"ocurrio un error{ex}")            
     def commit(self):
-        self.conn.commit()
-
-    def rollback(self):
-        self.conn.rollback()
-
-
+        try:
+            self.conn.commit()
+        except Error as ex:
+            print(f"Error al hacer commit{ex}")
+    
+    
 
 
 
