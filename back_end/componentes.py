@@ -3,9 +3,9 @@ class Componentes:
     def __init__(self, db):
         self.db = db
 
-    def insert(self, Nombre_Componente,idComponente,Vehiculo_idVehiculo,Vehiculo_Modelo_idModelo):
+    def insert(self, idComponente,Nombre_Componente,Vehiculo_idVehiculo,Vehiculo_Modelo_idModelo):
         sql = "INSERT INTO componentes VALUES (%s,%s,%s,%s)"
-        self.db.cursor.execute(sql, (Nombre_Componente,idComponente,Vehiculo_idVehiculo,Vehiculo_Modelo_idModelo))
+        self.db.cursor.execute(sql, (idComponente,Nombre_Componente,Vehiculo_idVehiculo,Vehiculo_Modelo_idModelo))
         self.db.commit()
 
     def update(self, idComponente, nombre_componente):

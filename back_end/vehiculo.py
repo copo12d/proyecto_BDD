@@ -4,17 +4,17 @@ class Vehiculo:
         self.db = db
 
     def insert(self,Tipo_Vehiculo,idVehiculo,Modelo_idModelo):
-        sql = "INSERT INTO vehiculo VALUES (%s,%s)"
+        sql = "INSERT INTO vehiculo VALUES (%s,%s,%s)"
         self.db.cursor.execute(sql,(idVehiculo,Tipo_Vehiculo,Modelo_idModelo))
         self.db.commit()
           
 
-    def update(self, Nombre_Marca,idMarca):
-         sql = "UPDATE vehiculo SET Tipo_Vehiculo = %s WHERE idVehiculo = %s"
-         self.db.cursor.execute(sql, (Nombre_Marca,idMarca))
+    def update(self, Tipo_Vehiculo,Modelo_idModelo,idVehuculo):
+         sql = "UPDATE vehiculo SET Tipo_Vehiculo = %s,Modelo_idModelo = %s WHERE idVehiculo = %s"
+         self.db.cursor.execute(sql, (Tipo_Vehiculo,Modelo_idModelo,idVehuculo))
          self.db.commit()
 
-    def delete(self, idMarca):
+    def delete(self, idVehiculo):
          sql = "DELETE FROM vehiculo WHERE idVehiculo = %s"
-         self.db.cursor.execute(sql, (idMarca,))
+         self.db.cursor.execute(sql, (idVehiculo,))
          self.db.commit()
