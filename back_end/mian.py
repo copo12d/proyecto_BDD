@@ -5,8 +5,7 @@ from marca import Marca
 from modelo import Modelo
 from vehiculo import Vehiculo
 from componentes import Componentes
-from front_end import Interfaz
-import tkinter as tk
+
 def main():
     
     db = Database("127.0.0.1","root","30412187","mydb")

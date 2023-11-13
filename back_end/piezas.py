@@ -33,7 +33,7 @@ class Piezas:
             self.db.cursor.execute(sql)
             result = self.db.cursor.fetchall()
             return result
-        except Exception as e:
+        except mysql.connector.Error as e:
             print(f"Error al obtener todas las piezas: {e}")
     
     def get_piezas_por_componente(self, id_componente, id_vehiculo, id_modelo):
