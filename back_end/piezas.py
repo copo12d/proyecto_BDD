@@ -36,23 +36,6 @@ class Piezas:
         except mysql.connector.Error as e:
             print(f"Error al obtener todas las piezas: {e}")
     
-    def get_piezas_por_componente(self, id_componente, id_vehiculo, id_modelo):
-        try:
-            sql_query = """
-                SELECT p.Nombre_Pieza, p.descripcion
-                FROM piezas p
-                JOIN componentes_has_piezas chp ON p.id_Piezas = chp.Piezas_id_Piezas
-                JOIN componentes c ON chp.Componentes_id_Componentes = c.id_Componentes
-                WHERE c.id_Componentes = %s
-                  AND c.Vehiculo_idVehiculo = %s
-                  AND c.Vehiculo_Modelo_idModelo = %s;
-            """
-            query_params = (id_componente, id_vehiculo, id_modelo)
-            self.db.cursor.execute(sql_query, query_params)
-            resultados = self.db.cursor.fetchall()
-            return resultados
-        except mysql.connector.Error as ex:
-            print(f"Fallo en la conexión: {ex}")
-            return None
+    
             
     

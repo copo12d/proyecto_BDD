@@ -18,3 +18,14 @@ class Marca:
          sql = "DELETE FROM marca WHERE idMarca = %s"
          self.db.cursor.execute(sql, (idMarca,))
          self.db.commit()
+         
+         
+    def get_all_marca(self):
+        try:
+            sql = "SELECT * FROM marca"
+            self.db.cursor.execute(sql)
+            result = self.db.cursor.fetchall()
+            return result
+        except Exception as e:
+            print(f"Error al obtener todos los modelos: {e}")
+            return None
