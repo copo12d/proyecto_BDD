@@ -17,3 +17,13 @@ class Componentes:
         sql = "DELETE FROM componentes WHERE idComponente = %s"
         self.db.cursor.execute(sql, (idComponente,))
         self.db.commit()
+
+    def get_all_componentes(self):
+        try:
+            sql = "SELECT * FROM componentes"
+            self.db.cursor.execute(sql)
+            result = self.db.cursor.fetchall()
+            return result
+        except Exception as e:
+            print(f"Error al obtener todos los modelos: {e}")
+            return None

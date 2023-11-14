@@ -18,3 +18,14 @@ class Vehiculo:
          sql = "DELETE FROM vehiculo WHERE idVehiculo = %s"
          self.db.cursor.execute(sql, (idVehiculo,))
          self.db.commit()
+    
+    def get_all_Vehiculos(self):
+        try:
+            sql = "SELECT * FROM Vehiculo"
+            self.db.cursor.execute(sql)
+            result = self.db.cursor.fetchall()
+            return result
+        except Exception as e:
+            print(f"Error al obtener todos los modelos: {e}")
+            return None
+

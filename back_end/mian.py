@@ -17,7 +17,7 @@ def main():
     
     try:
         if db:
-            componentes.insert(1,"Motor",1,1)
+            componentes.insert(3,"Motor",3,3)
             
     except mysql.connector.Error as e:
         print(f"hubo un error en la coneccion{e}")
