@@ -3,9 +3,9 @@ class Componentes:
     def __init__(self, db):
         self.db = db
 
-    def insert(self, idComponente,Nombre_Componente,Vehiculo_idVehiculo,Vehiculo_Modelo_idModelo):
-        sql = "INSERT INTO componentes VALUES (%s,%s,%s,%s)"
-        self.db.cursor.execute(sql, (idComponente,Nombre_Componente,Vehiculo_idVehiculo,Vehiculo_Modelo_idModelo))
+    def insert(self, idComponente,Nombre_Componente,Vehiculo_idVehiculo):
+        sql = "INSERT INTO componentes VALUES (%s,%s,%s)"
+        self.db.cursor.execute(sql, (idComponente,Nombre_Componente,Vehiculo_idVehiculo))
         self.db.commit()
 
     def update(self, idComponente, nombre_componente):
@@ -20,7 +20,7 @@ class Componentes:
 
     def get_all_componentes(self):
         try:
-            sql = "SELECT * FROM componentes"
+            sql = "SELECT * FROM componentes ORDER BY Nombre_Componente"
             self.db.cursor.execute(sql)
             result = self.db.cursor.fetchall()
             return result

@@ -22,7 +22,7 @@ class Marca:
          
     def get_all_marca(self):
         try:
-            sql = "SELECT * FROM marca"
+            sql = "SELECT * FROM marca ORDER BY Nombre_Marca"
             self.db.cursor.execute(sql)
             result = self.db.cursor.fetchall()
             return result
