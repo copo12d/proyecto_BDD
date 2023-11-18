@@ -34,14 +34,24 @@ class Piezas:
         except mysql.connector.Error as ex:
             print(f"fallo la conecxion {ex}")
             
-    def get_all_piezas(self):
+    def get_all_piezas(self, nombre_marca, nombre_modelo, nombre_componente):
         try:
-            sql = "SELECT * FROM piezas ORDER BY Nombre_Pieza"
-            self.db.cursor.execute(sql)
+            sql = """SELECT mo.Nombre_Modelo, ma.nombre_marca, pi.nombre_pieza
+                        FROM modelo mo
+                        JOIN marca ma ON mo.Marca_idMarca = ma.idMarca
+                        JOIN vehiculo ve ON ve.Modelo_idModelo = mo.idModelo
+                        JOIN componentes co ON co.Vehiculo_idVehiculo = ve.idVehiculo
+                        JOIN piezas pi ON pi.id_Componente = co.id_Componentes
+                        WHERE ma.nombre_marca = %s
+                        AND mo.Nombre_Modelo = %s
+                        AND co.Nombre_Componente = %s;
+                    """
+            self.db.cursor.execute(sql, (nombre_marca, nombre_modelo, nombre_componente))
             result = self.db.cursor.fetchall()
             return result
         except mysql.connector.Error as e:
             print(f"Error al obtener todas las piezas: {e}")
+
             
     def generate_pdf(self, nombre):
         sql = """SELECT mo.Nombre_Modelo, co.Nombre_Componente, pi.nombre_pieza

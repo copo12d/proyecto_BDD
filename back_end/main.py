@@ -17,7 +17,10 @@ def main():
     
     try:
         if db:
-            pieza.generate_pdf("hola")
+           resultado = pieza.get_all_piezas("NISSAN","x-Trail","motor")
+           for i in resultado:
+               
+               print(i)
     except mysql.connector.Error as e:
         print(f"hubo un error en la coneccion{e}")
     
