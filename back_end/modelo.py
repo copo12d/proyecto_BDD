@@ -30,4 +30,15 @@ class Modelo:
             print(f"Error al obtener todos los modelos: {e}")
             return None
     
-        
+    
+    def get_all_modelo_names(self):
+        try:
+            sql = "SELECT Nombre_Modelo FROM modelo ORDER BY Nombre_Modelo"
+            self.db.cursor.execute(sql)
+            result = self.db.cursor.fetchall()
+            # Extraer los nombres de los resultados y devolverlos como una lista
+            return [row[0] for row in result]
+        except Exception as e:
+            print(f"Error al obtener todos los modelos: {e}")
+            return None
+            

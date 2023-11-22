@@ -27,3 +27,15 @@ class Componentes:
         except Exception as e:
             print(f"Error al obtener todos los modelos: {e}")
             return None
+    
+    
+    def get_all_componente_names(self):
+        try:
+            sql = "SELECT Nombre_Componente FROM componentes ORDER BY Nombre_Componente"
+            self.db.cursor.execute(sql)
+            result = self.db.cursor.fetchall()
+            # Extraer los nombres de los resultados y devolverlos como una lista
+            return [row[0] for row in result]
+        except Exception as e:
+            print(f"Error al obtener todos los componentes: {e}")
+            return None
