@@ -3,9 +3,9 @@ class Componentes:
     def __init__(self, db):
         self.db = db
 
-    def insert(self, idComponente,Nombre_Componente,Vehiculo_idVehiculo):
+    def insert(self, id_Componente,Nombre_Componente,Vehiculo_idVehiculo):
         sql = "INSERT INTO componentes VALUES (%s,%s,%s)"
-        self.db.cursor.execute(sql, (idComponente,Nombre_Componente,Vehiculo_idVehiculo))
+        self.db.cursor.execute(sql, (id_Componente,Nombre_Componente,Vehiculo_idVehiculo))
         self.db.commit()
 
     def update(self, idComponente, nombre_componente):
@@ -13,9 +13,9 @@ class Componentes:
         self.db.cursor.execute(sql, (nombre_componente, idComponente))
         self.db.commit()
 
-    def delete(self, idComponente):
-        sql = "DELETE FROM componentes WHERE idComponente = %s"
-        self.db.cursor.execute(sql, (idComponente,))
+    def delete(self, id_Componente):
+        sql = "DELETE FROM componentes WHERE id_Componente = %s"
+        self.db.cursor.execute(sql, (id_Componente,))
         self.db.commit()
 
     def get_all_componentes(self):
