@@ -15,7 +15,7 @@ import re
 
 def main():
     
-    db = Database("127.0.0.1","root","30412187","mydb")
+    db = Database("127.0.0.1","root","0704","proyecto")
     marca = Marca(db)
     pieza = Piezas(db)
     modelo = Modelo(db)
@@ -34,14 +34,14 @@ def main():
 
             root.resizable(height=FALSE, width=FALSE)
             root.title("Grupo VAS System")
-            image4=ImageTk.PhotoImage(Image.open("menu.jpg"))
+            image4=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/menu.jpg"))
             label_inicio=Label(root, image=image4)
             label_inicio.pack()
             ancho=image4.width()
             alto=image4.height()
             root.geometry(f"{ancho}x{alto}+100+100")
             print(alto,ancho)
-            rickroll=ImageTk.PhotoImage(Image.open("rickroll.jpg"))
+            rickroll=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/rickroll.jpg"))
 
             #---------DEFINIENDO LA FUNCION PARA MOSTRAR LOS FRAMES (Y ELIMINAR LA IMAGEN DE INICIO)---------
 
@@ -53,6 +53,8 @@ def main():
                 label_inicio.pack_forget()
                 if frame==vehiculoframe or frame==componentesframe or frame==piezasframe or frame==marcaframe or frame==modeloframe:
                     widgetstablas(frame)
+                elif frame==consultasframe:
+                    consultas()
                     
                 
 
@@ -930,7 +932,102 @@ def main():
                     tablac()
                     elementos()
 
+
+
+            #----------FRAME CONSULTAS----------------
+            def consultas():
+                def main():
+                    consultaslabel=Label(consultasframe, text="Selecciona", fg="#134265", font=('crushed', 12, 'bold')).grid(row=0,column=0)
                     
+                    marca_combobox=ttk.Combobox(consultasframe, state="readonly")
+                    modelo_combobox=ttk.Combobox(consultasframe, state="readonly")
+                    componente_combobox=ttk.Combobox(consultasframe, state="readonly")
+                    
+
+                    
+                    marca_combobox.grid(row=1,column=0)
+                    modelo_combobox.grid(row=2,column=0)
+                    componente_combobox.grid(row=3,column=0)
+                    
+
+                    cargar_marcas()
+                    marca_combobox.bind("<<ComboboxSelected>>", cargar_modelos)
+                    modelo_combobox.bind("<<ComboboxSelected>>", cargar_componentes)
+                    componente_combobox.bind("<<ComboboxSelected>>", mostrar_resultados)
+
+                    def cargar_marcas():
+                        global marca_combobox
+                        marcas = marca.get_all_marca_names()
+                        if marcas:
+                            marca_combobox['values'] = marcas
+                            marca_combobox.current(0)  # Seleccionar el primer elemento por defecto
+
+                    def cargar_modelos(event):
+                        global marca_combobox, modelo_combobox
+                        
+                        marca_seleccionada = marca_combobox.get()
+                        modelos = modelo.get_all_modelo_names()
+                        if modelos:
+                            modelo_combobox['values'] = modelos
+                            modelo_combobox.current(0)  # Seleccionar el primer elemento por defecto
+
+                    def cargar_componentes(event):
+                        global marca_combobox, modelo_combobox, componente_combobox
+                        marca_seleccionada = marca_combobox.get()
+                        modelo_seleccionado = modelo_combobox.get()
+                        componentes = componentes.get_all_componente_names()
+                        if componentes:
+                            componente_combobox['values'] = componentes
+                            componente_combobox.current(0)  # Seleccionar el primer elemento por defecto
+
+                    def mostrar_resultados(event):
+                        
+                        marca_seleccionada = marca_combobox.get()
+                        modelo_seleccionado = modelo_combobox.get()
+                        componente_seleccionado = componente_combobox.get()
+
+                        # Obtener los resultados y mostrarlos en el Text
+                        resultados = pieza.get_all_piezass(marca_seleccionada, modelo_seleccionado, componente_seleccionado)
+                        
+                        if resultados:
+                            for resultado in resultados:
+                                tabla.insert("", END, values=resultado)
+                        else:
+                            mensaje=messagebox(consultasframe, text="No se encontraron resultados.")
+                            mensaje.pack()
+
+
+                def tablac(): 
+                            
+                        global tabla, resultados
+
+                        tabla=ttk.Treeview(consultasframe, columns=(1,2,3), show="headings")
+                            
+                        scroll=ttk.Scrollbar(consultasframe, orient=VERTICAL, command= tabla.yview)
+                        scroll.grid(row=6, column=3, sticky=NSEW)
+                        tabla.configure(yscrollcommand=scroll.set)
+
+                        tabla.heading(1, text="Marca")
+                        tabla.heading(2, text="Modelo")
+                        tabla.heading(3, text="Pieza")
+                            
+                                
+                                
+                        for item in tabla.get_children():
+                            tabla.delete(item)
+
+                        
+
+                        tabla.grid(row=6,column=0,columnspan=3, sticky="nsew")
+                        
+
+                    
+                tablac()
+                main()
+
+
+
+
 
 
 
@@ -960,17 +1057,15 @@ def main():
 
             #---------DEFINIENDO LAS IMAGENES---------
 
+            imagen=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/empty.jpg"))
+            imagen2=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/menu.jpg"))
 
-           
-            imagen2=ImageTk.PhotoImage(Image.open("menu.jpg"))
-
-            imagenpiezas=ImageTk.PhotoImage(Image.open("piezas.png"))
-            imagenmodelo=ImageTk.PhotoImage(Image.open("modelo.png"))
-            imagenmarca=ImageTk.PhotoImage(Image.open("marca.png"))
-            imagenvehiculo=ImageTk.PhotoImage(Image.open("carro.png"))
-            imagencomponentes=ImageTk.PhotoImage(Image.open("componentes.png"))
-            imagenrickroll=ImageTk.PhotoImage(Image.open("rickroll.jpg"))
-
+            imagenpiezas=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/piezas.png"))
+            imagenmodelo=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/modelo.png"))
+            imagenmarca=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/marca.png"))
+            imagenvehiculo=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/carro.png"))
+            imagencomponentes=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/componentes.png"))
+            imagenrickroll=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/rickroll.jpg"))
 
 
 
