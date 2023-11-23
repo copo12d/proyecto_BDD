@@ -10,7 +10,7 @@ class Piezas:
     def __init__(self, db):
         self.db = db
 
-    def insert(self, nombre_pieza,id_piezas,descripcion,id_Componentes):
+    def insert(self, id_piezas,nombre_pieza,descripcion,id_Componentes):
         try:
             sql = "INSERT INTO piezas VALUES (%s,%s,%s,%s)"
             self.db.cursor.execute(sql, (id_piezas,nombre_pieza,descripcion,id_Componentes))
@@ -33,8 +33,18 @@ class Piezas:
             self.db.commit()
         except mysql.connector.Error as ex:
             print(f"fallo la conecxion {ex}")
+
+    def get_all_piezas(self):
+        try:
+            sql = "SELECT * FROM piezas ORDER BY id_piezas"
+            self.db.cursor.execute(sql)
+            result = self.db.cursor.fetchall()
+            return result
+        except Exception as e:
+            print(f"Error al obtener todas las piezas: {e}")
+            return None
             
-    def get_all_piezas(self, nombre_marca, nombre_modelo, nombre_componente):
+    def get_all_piezass(self, nombre_marca, nombre_modelo, nombre_componente):
         try:
             sql = """SELECT mo.Nombre_Modelo, ma.nombre_marca, pi.nombre_pieza, ve.año
                     FROM modelo mo
@@ -52,6 +62,7 @@ class Piezas:
             return result
         except mysql.connector.Error as e:
             print(f"Error al obtener todas las piezas: {e}")
+
 
             
     def generate_pdf(self, nombre):
@@ -101,6 +112,3 @@ class Piezas:
 
         print(f"Se ha generado el archivo PDF: {pdf_filename}")
         
-    
-            
-    

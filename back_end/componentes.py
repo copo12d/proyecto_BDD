@@ -8,9 +8,9 @@ class Componentes:
         self.db.cursor.execute(sql, (id_Componentes,Nombre_Componente,Vehiculo_idVehiculo))
         self.db.commit()
 
-    def update(self, id_Componente, nombre_componente):
+    def update(self, id_Componentes, nombre_componente):
         sql = "UPDATE componentes SET nombre_componente  = %s WHERE id_Componentes = %s"
-        self.db.cursor.execute(sql, (nombre_componente, id_Componente))
+        self.db.cursor.execute(sql, (nombre_componente, id_Componentes))
         self.db.commit()
 
     def delete(self, id_Componente):
@@ -20,7 +20,7 @@ class Componentes:
 
     def get_all_componentes(self):
         try:
-            sql = "SELECT * FROM componentes ORDER BY Nombre_Componente"
+            sql = "SELECT * FROM componentes ORDER BY id_Componentes"
             self.db.cursor.execute(sql)
             result = self.db.cursor.fetchall()
             return result
