@@ -960,6 +960,7 @@ def main():
 
             #---------DEFINIENDO LAS IMAGENES---------
 
+
            
             imagen2=ImageTk.PhotoImage(Image.open("menu.jpg"))
 
@@ -969,6 +970,7 @@ def main():
             imagenvehiculo=ImageTk.PhotoImage(Image.open("carro.png"))
             imagencomponentes=ImageTk.PhotoImage(Image.open("componentes.png"))
             imagenrickroll=ImageTk.PhotoImage(Image.open("rickroll.jpg"))
+
 
 
 
