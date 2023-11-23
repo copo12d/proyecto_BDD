@@ -37,7 +37,14 @@ class Piezas:
     def get_all_piezas(self, nombre_marca, nombre_modelo, nombre_componente):
         try:
             sql = """SELECT mo.Nombre_Modelo, ma.nombre_marca, pi.nombre_pieza, ve.año
-                        
+                    FROM modelo mo
+                    JOIN marca ma ON mo.Marca_idMarca = ma.idMarca
+                    JOIN vehiculo ve ON ve.Modelo_idModelo = mo.idModelo
+                    JOIN componentes co ON co.Vehiculo_idVehiculo = ve.idVehiculo
+                    JOIN piezas pi ON pi.id_Componente = co.id_Componentes
+                    WHERE ma.nombre_marca = %s
+                    AND mo.Nombre_Modelo = %s
+                    AND co.Nombre_Componente = %s ;
 
                     """
             self.db.cursor.execute(sql, (nombre_marca, nombre_modelo, nombre_componente))

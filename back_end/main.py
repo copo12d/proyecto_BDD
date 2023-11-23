@@ -26,7 +26,7 @@ def main():
         if db:
           
             
-            
+            componentes.update(22,"Motor monocilíndrico")
 
 
             
