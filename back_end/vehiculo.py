@@ -3,15 +3,15 @@ class Vehiculo:
     def __init__(self, db):
         self.db = db
 
-    def insert(self,Tipo_Vehiculo,idVehiculo,Modelo_idModelo,año):
+    def insert(self,idVehiculo,Tipo_Vehiculo,Modelo_idModelo,año):
         sql = "INSERT INTO vehiculo VALUES (%s,%s,%s,%s)"
         self.db.cursor.execute(sql,(idVehiculo,Tipo_Vehiculo,Modelo_idModelo,año))
         self.db.commit()
           
 
-    def update(self, Tipo_Vehiculo,Modelo_idModelo,año,idVehuculo):
+    def update(self, idVehiculo,Tipo_Vehiculo,Modelo_idModelo,año):
          sql = "UPDATE vehiculo SET Tipo_Vehiculo = %s,Modelo_idModelo = %s,año = %s WHERE idVehiculo = %s"
-         self.db.cursor.execute(sql, (Tipo_Vehiculo,Modelo_idModelo,año,idVehuculo))
+         self.db.cursor.execute(sql, (idVehiculo,Tipo_Vehiculo,Modelo_idModelo,año))
          self.db.commit()
 
     def delete(self, idVehiculo):
@@ -21,7 +21,7 @@ class Vehiculo:
     
     def get_all_Vehiculos(self):
         try:
-            sql = "SELECT * FROM Vehiculo ORDER BY tipo_Vehiculo= 'carro'"
+            sql = "SELECT * FROM Vehiculo ORDER BY idVehiculo"
             self.db.cursor.execute(sql)
             result = self.db.cursor.fetchall()
             return result

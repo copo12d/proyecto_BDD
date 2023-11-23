@@ -8,7 +8,7 @@ from vehiculo import Vehiculo
 from componentes import Componentes
 class MyApp:
     def __init__(self, root):
-        self.db = Database("127.0.0.1", "root", "30412187", "mydb")  # Reemplaza con tus credenciales
+        self.db = Database("127.0.0.1", "root", "0704", "proyecto")  # Reemplaza con tus credenciales
         self.marca = Marca(self.db)
         self.pieza = Piezas(self.db)
         self.modelo = Modelo(self.db)

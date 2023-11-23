@@ -104,116 +104,511 @@ def main():
                 global tam
                 if frame==modeloframe:
 
+                    def agregarbtn():
+                        
+                        modelo.insert(int(idModeloentry.get()),Nombre_Modeloentry.get(),int(idMarcaentry.get()))
+
+                        idModeloentry.delete(0,END)
+                        Nombre_Modeloentry.delete(0,END)
+                        idMarcaentry.delete(0,END)
+                        
+                        tablac()
+                        
+
+                    def editarbtn():
+                        global tabla
+                        Guardar.config(state=NORMAL)
+                        idModeloentry.delete(0,END)
+                        Nombre_Modeloentry.delete(0,END)
+                        idMarcaentry.delete(0,END)
+                        
+
+                        idModelovalor=tabla.item(tabla.selection())['values'][0]
+                        Nombre_Modelovalor=tabla.item(tabla.selection())['values'][1]
+                        idMarcavalor=tabla.item(tabla.selection())['values'][2]
+
+
+                        idModeloentry.insert(0,idModelovalor)
+                        Nombre_Modeloentry.insert(0,Nombre_Modelovalor)
+                        idMarcaentry.insert(0,idMarcavalor)
+                        
+                        Nuevo.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        
+                     
+                    def borrarbtn():
+                        global tabla
+                        id_modelo=tabla.item(tabla.selection())['values'][0]
+                        modelo.delete(id_modelo)
+                        Nuevo.config(state=NORMAL)
+                        tablac()
+                           
+
+                    def guardarbtn():
+                        borrarbtn()  
+                        agregarbtn()
+                        Guardar.config(state=DISABLED)
+                        Nuevo.config(state=NORMAL)
+                        
+                        
                     
+                    registros=modelo.get_all_modelos()
+
+
+
+                    def nuevobtn():
+                        idModeloentry.delete(0,END)
+                        Nombre_Modeloentry.delete(0,END)
+                        idMarcaentry.delete(0,END)
+                        
+                        
+                        Agregar.config(state=NORMAL)
                     
+                    def elementos(event=NONE):
+                        global tabla
+                        if tabla.selection():
+                            Editar.config(state=NORMAL)
+                            Eliminar.config(state=NORMAL)
+
+                    
+
+                    def cancelarbtn():
+                        global tabla
+                        idModeloentry.delete(0,END)
+                        Nombre_Modeloentry.delete(0,END)
+                        idMarcaentry.delete(0,END)
+                        
+
+                        tabla.selection_remove(tabla.selection())
+                        Editar.config(state=DISABLED)
+                        Eliminar.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        Nuevo.config(state=NORMAL)
+                        
+                            
+
+
+
+
                     idModeloentry=Entry(modeloframe, width=30)
-                    Nombre_modeloentry=Entry(modeloframe, width=30)
-                    Añoentry=Entry(modeloframe, width=30)
-                    Marca_idMarcaentry=Entry(modeloframe, width=30)
+                    Nombre_Modeloentry=Entry(modeloframe, width=30)
+                    idMarcaentry=Entry(modeloframe, width=30)
+                    
 
+                    
+                    
                     idModeloentry.grid(row=0,column=1)
-                    Nombre_modeloentry.grid(row=1,column=1)
-                    Añoentry.grid(row=2,column=1)
-                    Marca_idMarcaentry.grid(row=3,column=1)
-                    
-                    idmodeloint=idModeloentry.get()
-                    Añoint=Añoentry.get()
-                    Marca_idMarcaint=Marca_idMarcaentry.get()
-
-
+                    Nombre_Modeloentry.grid(row=1,column=1)
+                    idMarcaentry.grid(row=2,column=1)
                     
 
+                        
                     
 
-                    idModelolabel=Label(modeloframe,text="idModelo", fg="#134265", font=('crushed', 12, 'bold')).grid(row=0,column=0)
-                    Nombre_modelolabel=Label(modeloframe,text="Nombre_modelo", fg="#134265", font=('crushed', 12, 'bold')).grid(row=1,column=0)
-                    Añolabel=Label(modeloframe,text="Año", fg="#134265", font=('crushed', 12, 'bold')).grid(row=2,column=0)
-                    Marca_idMarcalabel=Label(modeloframe,text="Marca_idMarca", fg="#134265", font=('crushed', 12, 'bold')).grid(row=3,column=0)
-
-                    Nuevo=Button(modeloframe, text="Nuevo", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=4,column=0)
-                    Agregar=Button(modeloframe, text="Agregar", command=lambda:agregarbtn(modelo), padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=4, column=1)
-                    Cancelar=Button(modeloframe, text="Cancelar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=4,column=2)
+                    idModelolabel=Label(modeloframe,text="idModelo (P)", fg="#134265", font=('crushed', 12, 'bold')).grid(row=0,column=0)
+                    Nombre_Modelolabel=Label(modeloframe,text="Nombre_Modelo", fg="#134265", font=('crushed', 12, 'bold')).grid(row=1,column=0)
+                    idMarcalabel=Label(modeloframe,text="idMarca (F)", fg="#134265", font=('crushed', 12, 'bold')).grid(row=2,column=0)
                     
-                    Editar=Button(modeloframe, text="Editar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=8,column=0)
-                    Eliminar=Button(modeloframe, text="Eliminar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=8, column=1)
-                    Cancelar2=Button(modeloframe, text="Cancelar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=8,column=2)
+                    
 
+                    Nuevo=Button(modeloframe, text="Nuevo", command=nuevobtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Nuevo.grid(row=4,column=0)
+                    Agregar=Button(modeloframe, text="Agregar", command=agregarbtn, state=DISABLED,padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Agregar.grid(row=4, column=1)
+                    Cancelar=Button(modeloframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Cancelar.grid(row=4,column=2)
+
+                    Editar=Button(modeloframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar.grid(row=8,column=0)
+                    Eliminar=Button(modeloframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Eliminar.grid(row=8, column=1)
+                    Guardar=Button(modeloframe, text="Guardar", command=guardarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Guardar.grid(row=8,column=2)
                     espacio2=Label(modeloframe, text="     ").grid(row=5,column=0)
                     espacio3=Label(modeloframe, text="     ").grid(row=7,column=0)
 
-                    tabla=ttk.Treeview(modeloframe, columns=(1, 2, 3, 4), show="headings")
-                    tabla.grid(row=6,column=0,columnspan=4, sticky="nsew")
+                    
+                    
 
-                    tabla.heading(1, text="IdModelo")
-                    tabla.heading(2, text="Nombre_Modelo")
-                    tabla.heading(3, text="Año")
-                    tabla.heading(4, text="Marca_idMarca")
+                    
 
-                    entrys=[int(idmodeloint), Nombre_modeloentry.get(), int(Añoint), int(Marca_idMarcaint)]
+                    
+                    def tablac(): 
+                        
+                        global tabla
+
+                        tabla=ttk.Treeview(modeloframe, columns=(1,2,3), show="headings")
+                        
+                        scroll=ttk.Scrollbar(modeloframe, orient=VERTICAL, command= tabla.yview)
+                        scroll.grid(row=6, column=3, sticky=NSEW)
+                        tabla.configure(yscrollcommand=scroll.set)
+
+                        tabla.heading(1, text="idModelo")
+                        tabla.heading(2, text="Nombre_Modelo")
+                        tabla.heading(3, text="idMarca")
+                        
+                            
+                            
+                        for item in tabla.get_children():
+                            tabla.delete(item)
+
+                        registros=modelo.get_all_modelos()
+                        
+                        
+                        
+
+                        for registro in registros:
+                            tabla.insert("", "end", values=registro)
+
+                        tabla.grid(row=6,column=0,columnspan=3, sticky="nsew")
+                        tabla.bind("<<TreeviewSelect>>", elementos)
+
+                    
+                    tablac()
+                    elementos()
 
 
 
                 elif frame==piezasframe:
-                    idPiezasentry=Entry(piezasframe, width=30).grid(row=0,column=1)
-                    Nombre_piezaentry=Entry(piezasframe, width=30).grid(row=1,column=1)
-                    Componentes_id_Componentesentry=Entry(piezasframe, width=30).grid(row=2,column=1)
+
+                    def agregarbtn():
+                        
+                        pieza.insert(int(id_piezasentry.get()),nombre_piezaentry.get(),descripcionentry.get(), int(id_Componenteentry.get()))
+                        
+                        id_piezasentry.delete(0,END)
+                        nombre_piezaentry.delete(0,END)
+                        descripcionentry.delete(0,END)
+                        id_Componenteentry.delete(0,END)
+                        
+                        tablac()
+                        
+
+                    def editarbtn():
+                        global tabla
+                        Guardar.config(state=NORMAL)
+                        id_piezasentry.delete(0,END)
+                        nombre_piezaentry.delete(0,END)
+                        descripcionentry.delete(0,END)
+                        id_Componenteentry.delete(0,END)
+                        
+
+                        idpiezasvalor=tabla.item(tabla.selection())['values'][0]
+                        nombrepiezavalor=tabla.item(tabla.selection())['values'][1]
+                        descripcionvalor=tabla.item(tabla.selection())['values'][2]
+                        idcomponentevalor=tabla.item(tabla.selection())['values'][3]
+                        
+
+                        id_piezasentry.insert(0,idpiezasvalor)
+                        nombre_piezaentry.insert(0,nombrepiezavalor)
+                        descripcionentry.insert(0,descripcionvalor)
+                        id_Componenteentry.insert(0,idcomponentevalor)
+                        
+                        Nuevo.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        
+                     
+                    def borrarbtn():
+                        global tabla
+                        idpiezas=tabla.item(tabla.selection())['values'][0]
+                        pieza.delete(idpiezas)
+                        Nuevo.config(state=NORMAL)
+                        tablac()
+                           
+
+                    def guardarbtn():
+                        borrarbtn()  
+                        agregarbtn()
+                        Guardar.config(state=DISABLED)
+                        Nuevo.config(state=NORMAL)
+                        
+                        
+                    
+                    registros=pieza.get_all_piezas()
 
 
-                    idPiezaslabel=Label(piezasframe,text="idPiezas", fg="#134265", font=('crushed', 12, 'bold')).grid(row=0,column=0)
-                    Nombre_piezaslabel=Label(piezasframe,text="Nombre_piezas", fg="#134265", font=('crushed', 12, 'bold')).grid(row=1,column=0)
-                    Componentes_id_Componenteslabel=Label(piezasframe,text="id_Componentes", fg="#134265", font=('crushed', 12, 'bold')).grid(row=2,column=0)
+
+                    def nuevobtn():
+                        id_piezasentry.delete(0,END)
+                        nombre_piezaentry.delete(0,END)
+                        descripcionentry.delete(0,END)
+                        id_Componenteentry.delete(0,END)
+                        
+                        Agregar.config(state=NORMAL)
+                    
+                    def elementos(event=NONE):
+                        global tabla
+                        if tabla.selection():
+                            Editar.config(state=NORMAL)
+                            Eliminar.config(state=NORMAL)
+
                     
 
-                    Nuevo=Button(piezasframe, text="Nuevo", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=4,column=0)
-                    Agregar=Button(piezasframe, text="Agregar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=4, column=1)
-                    Cancelar=Button(piezasframe, text="Cancelar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=4,column=2)
+                    def cancelarbtn():
+                        global tabla
+                        id_piezasentry.delete(0,END)
+                        nombre_piezaentry.delete(0,END)
+                        descripcionentry.delete(0,END)
+                        id_Componenteentry.delete(0,END)
+                        
 
-                    Editar=Button(piezasframe, text="Editar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=8,column=0)
-                    Eliminar=Button(piezasframe, text="Eliminar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=8, column=1)
-                    Cancelar2=Button(piezasframe, text="Cancelar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=8,column=2)
+                        tabla.selection_remove(tabla.selection())
+                        Editar.config(state=DISABLED)
+                        Eliminar.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        Nuevo.config(state=NORMAL)
+                        
+                            
 
+
+                    id_piezasentry=Entry(piezasframe, width=30)
+                    nombre_piezaentry=Entry(piezasframe, width=30)
+                    descripcionentry=Entry(piezasframe, width=30)
+                    id_Componenteentry=Entry(piezasframe, width=30)
+                    
+                    id_piezasentry.grid(row=0,column=1)
+                    nombre_piezaentry.grid(row=1,column=1)
+                    descripcionentry.grid(row=2,column=1)
+                    id_Componenteentry.grid(row=3,column=1)
+                    
+                
+
+                    id_piezaslabel=Label(piezasframe,text="id_pieza (P)", fg="#134265", font=('crushed', 12, 'bold')).grid(row=0,column=0)
+                    nombre_piezalabel=Label(piezasframe,text="nombre_pieza", fg="#134265", font=('crushed', 12, 'bold')).grid(row=1,column=0)
+                    descripcionlabel=Label(piezasframe,text="descripción", fg="#134265", font=('crushed', 12, 'bold')).grid(row=2,column=0)
+                    id_Componentelabel=Label(piezasframe,text="idComponente (F)", fg="#134265", font=('crushed', 12, 'bold')).grid(row=3,column=0)
+                    
+                    
+
+                    Nuevo=Button(piezasframe, text="Nuevo", command=nuevobtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Nuevo.grid(row=4,column=0)
+                    Agregar=Button(piezasframe, text="Agregar", command=agregarbtn, state=DISABLED,padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Agregar.grid(row=4, column=1)
+                    Cancelar=Button(piezasframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Cancelar.grid(row=4,column=2)
+
+                    Editar=Button(piezasframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar.grid(row=8,column=0)
+                    Eliminar=Button(piezasframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Eliminar.grid(row=8, column=1)
+                    Guardar=Button(piezasframe, text="Guardar", command=guardarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Guardar.grid(row=8,column=2)
                     espacio2=Label(piezasframe, text="     ").grid(row=5,column=0)
                     espacio3=Label(piezasframe, text="     ").grid(row=7,column=0)
 
-                    tabla=ttk.Treeview(piezasframe, columns=(1, 2, 3), show="headings")
-                    tabla.grid(row=6,column=0,columnspan=3, sticky="nsew")
+                    
+                    
 
-                    tabla.heading(1, text="IdModelo")
-                    tabla.heading(2, text="Nombre_piezas")
-                    tabla.heading(3, text="id_Componentes")
+                    
+
+                    
+                    def tablac(): 
+                        
+                        global tabla
+
+                        tabla=ttk.Treeview(piezasframe, columns=(1,2,3,4), show="headings")
+                        
+                        scroll=ttk.Scrollbar(piezasframe, orient=VERTICAL, command= tabla.yview)
+                        scroll.grid(row=6, column=3, sticky=NSEW)
+                        tabla.configure(yscrollcommand=scroll.set)
+
+                        tabla.heading(1, text="id_pieza")
+                        tabla.heading(2, text="Nombre_pieza")
+                        tabla.heading(3, text="descripcion")
+                        tabla.heading(4, text="id_Componente")
+                        
+                            
+                            
+                        for item in tabla.get_children():
+                            tabla.delete(item)
+
+                        registros=pieza.get_all_piezas()
+                        
+                        
+                        
+
+                        for registro in registros:
+                            tabla.insert("", "end", values=registro)
+
+                        tabla.grid(row=6,column=0,columnspan=3, sticky="nsew")
+                        tabla.bind("<<TreeviewSelect>>", elementos)
+
+                    
+                    tablac()
+                    elementos()
                     
 
 
 
                 elif frame==vehiculoframe:
 
-                    idVehiculoentry=Entry(vehiculoframe, width=30).grid(row=0,column=1)
-                    Tipo_Vehiculoentry=Entry(vehiculoframe, width=30).grid(row=1,column=1)
-                    Modelo_idModeloentry=Entry(vehiculoframe, width=30).grid(row=2,column=1)
+                    def agregarbtn():
+                        
+                        vehiculo.insert(int(idVehiculoentry.get()),Tipo_Vehiculoentry.get(),int(idModeloentry.get()), int(Añoentry.get()))
+                        
+                        idVehiculoentry.delete(0,END)
+                        Tipo_Vehiculoentry.delete(0,END)
+                        idModeloentry.delete(0,END)
+                        Añoentry.delete(0,END)
+                        
+                        tablac()
+                        
+
+                    def editarbtn():
+                        global tabla
+                        Guardar.config(state=NORMAL)
+                        idVehiculoentry.delete(0,END)
+                        Tipo_Vehiculoentry.delete(0,END)
+                        idModeloentry.delete(0,END)
+                        Añoentry.delete(0,END)
+                        
+
+                        idVehiculovalor=tabla.item(tabla.selection())['values'][0]
+                        Tipo_Vehiculovalor=tabla.item(tabla.selection())['values'][1]
+                        idModelovalor=tabla.item(tabla.selection())['values'][2]
+                        Añoentryvalor=tabla.item(tabla.selection())['values'][2]
+                        
+                        idVehiculoentry.insert(0,idVehiculovalor)
+                        Tipo_Vehiculoentry.insert(0,Tipo_Vehiculovalor)
+                        idModeloentry.insert(0,idModelovalor)
+                        Añoentry.insert(0,Añoentryvalor)
+                        
+                        Nuevo.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        
+                     
+                    def borrarbtn():
+                        global tabla
+                        idVehiculo=tabla.item(tabla.selection())['values'][0]
+                        vehiculo.delete(idVehiculo)
+                        Nuevo.config(state=NORMAL)
+                        tablac()
+                           
+
+                    def guardarbtn():
+                        borrarbtn()  
+                        agregarbtn()
+                        Guardar.config(state=DISABLED)
+                        Nuevo.config(state=NORMAL)
+                        
+                        
+                    
+                    registros=vehiculo.get_all_Vehiculos()
 
 
-                    idVehiculolabel=Label(vehiculoframe,text="idVehiculo", fg="#134265", font=('crushed', 12, 'bold')).grid(row=0,column=0)
-                    Tipo_Vehiculolabel=Label(vehiculoframe,text="Tipo_Vehiculo", fg="#134265", font=('crushed', 12, 'bold')).grid(row=1,column=0)
-                    Modelo_idModelolabel=Label(vehiculoframe,text="id_Modelo", fg="#134265", font=('crushed', 12, 'bold')).grid(row=2,column=0)
+
+                    def nuevobtn():
+                        idVehiculoentry.delete(0,END)
+                        Tipo_Vehiculoentry.delete(0,END)
+                        idModeloentry.delete(0,END)
+                        Añoentry.delete(0,END)
+                        
+                        
+                        Agregar.config(state=NORMAL)
+                    
+                    def elementos(event=NONE):
+                        global tabla
+                        if tabla.selection():
+                            Editar.config(state=NORMAL)
+                            Eliminar.config(state=NORMAL)
+
                     
 
-                    Nuevo=Button(vehiculoframe, text="Nuevo", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=4,column=0)
-                    Agregar=Button(vehiculoframe, text="Agregar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=4, column=1)
-                    Cancelar=Button(vehiculoframe, text="Cancelar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=4,column=2)
+                    def cancelarbtn():
+                        global tabla
+                        idVehiculoentry.delete(0,END)
+                        Tipo_Vehiculoentry.delete(0,END)
+                        idModeloentry.delete(0,END)
+                        Añoentry.delete(0,END)
+                        
 
-                    Editar=Button(vehiculoframe, text="Editar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=8,column=0)
-                    Eliminar=Button(vehiculoframe, text="Eliminar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=8, column=1)
-                    Cancelar2=Button(vehiculoframe, text="Cancelar", command=agregarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13)).grid(row=8,column=2)
+                        tabla.selection_remove(tabla.selection())
+                        Editar.config(state=DISABLED)
+                        Eliminar.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        Nuevo.config(state=NORMAL)
+                        
+                            
 
+
+
+
+                    idVehiculoentry=Entry(vehiculoframe, width=30)
+                    Tipo_Vehiculoentry=Entry(vehiculoframe, width=30)
+                    idModeloentry=Entry(vehiculoframe, width=30)
+                    Añoentry=Entry(vehiculoframe, width=30)
+                    
+                    idVehiculoentry.grid(row=0,column=1)
+                    Tipo_Vehiculoentry.grid(row=1,column=1)
+                    idModeloentry.grid(row=2,column=1)
+                    Añoentry.grid(row=3,column=1)
+                    
+                
+
+                        
+                    
+
+                    idVehiculolabel=Label(vehiculoframe,text="idVehiculo (P)", fg="#134265", font=('crushed', 12, 'bold')).grid(row=0,column=0)
+                    Tipo_Vehiculolabel=Label(vehiculoframe,text="Tipo_Vehiculo", fg="#134265", font=('crushed', 12, 'bold')).grid(row=1,column=0)
+                    idModelolabel=Label(vehiculoframe,text="idModelo (F)", fg="#134265", font=('crushed', 12, 'bold')).grid(row=2,column=0)
+                    Añolabel=Label(vehiculoframe,text="Año", fg="#134265", font=('crushed', 12, 'bold')).grid(row=3,column=0)
+                    
+
+                    Nuevo=Button(vehiculoframe, text="Nuevo", command=nuevobtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Nuevo.grid(row=4,column=0)
+                    Agregar=Button(vehiculoframe, text="Agregar", command=agregarbtn, state=DISABLED,padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Agregar.grid(row=4, column=1)
+                    Cancelar=Button(vehiculoframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Cancelar.grid(row=4,column=2)
+
+                    Editar=Button(vehiculoframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar.grid(row=8,column=0)
+                    Eliminar=Button(vehiculoframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Eliminar.grid(row=8, column=1)
+                    Guardar=Button(vehiculoframe, text="Guardar", command=guardarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Guardar.grid(row=8,column=2)
                     espacio2=Label(vehiculoframe, text="     ").grid(row=5,column=0)
                     espacio3=Label(vehiculoframe, text="     ").grid(row=7,column=0)
 
-                    tabla = ttk.Treeview(vehiculoframe, columns=(1, 2, 3), show="headings")
-                    tabla.grid(row=6, column=0, columnspan=3, sticky="nsew")
+                    
+                    
 
-                    tabla.heading(1, text='IdVehiculo')
-                    tabla.heading(2, text="Tipo_Vehiculo")
-                    tabla.heading(3, text="id_Modelo")
+                    
+
+                    
+                    def tablac(): 
+                        
+                        global tabla
+
+                        tabla=ttk.Treeview(vehiculoframe, columns=(1,2,3,4), show="headings")
+                        
+                        scroll=ttk.Scrollbar(vehiculoframe, orient=VERTICAL, command= tabla.yview)
+                        scroll.grid(row=6, column=3, sticky=NSEW)
+                        tabla.configure(yscrollcommand=scroll.set)
+
+                        tabla.heading(1, text="idVehiculo")
+                        tabla.heading(2, text="Tipo_Vehiculo")
+                        tabla.heading(3, text="idModelo")
+                        tabla.heading(4, text="Año")
+                        
+                            
+                            
+                        for item in tabla.get_children():
+                            tabla.delete(item)
+
+                        registros=vehiculo.get_all_Vehiculos()
+                        
+                        
+                        
+
+                        for registro in registros:
+                            tabla.insert("", "end", values=registro)
+
+                        tabla.grid(row=6,column=0,columnspan=3, sticky="nsew")
+                        tabla.bind("<<TreeviewSelect>>", elementos)
+
+                    
+                    tablac()
+                    elementos()
                     
 
 
@@ -573,7 +968,7 @@ def main():
             imagenmarca=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/marca.png"))
             imagenvehiculo=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/carro.png"))
             imagencomponentes=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/componentes.png"))
-
+            imagenrickroll=ImageTk.PhotoImage(Image.open("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto/images/rickroll.jpg"))
 
 
 
@@ -590,7 +985,9 @@ def main():
             label_imagenmodelo=Label(menuframe, image=imagenmodelo).grid(row=5,column=2)
             label_imagenmarca=Label(menuframe, image=imagenmarca).grid(row=5,column=3)
             label_imagenpiezas=Label(menuframe, image=imagenpiezas).grid(row=5,column=4)
+            label_imagencomponentes=Label(menuframe,image=imagencomponentes).grid(row=5,column=5)
             llabelrickroll=Label(ayudaframe, text="rickrolleado pa").grid(row=0,column=0)
+            labelrickroll=Label(ayudaframe, image=imagenrickroll).grid(row=1, column=0)
 
 
 

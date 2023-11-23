@@ -22,7 +22,7 @@ class Modelo:
         
     def get_all_modelos(self):
         try:
-            sql = "SELECT * FROM modelo ORDER BY Nombre_Modelo"
+            sql = "SELECT * FROM modelo ORDER BY idModelo"
             self.db.cursor.execute(sql)
             result = self.db.cursor.fetchall()
             return result
