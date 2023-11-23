@@ -9,12 +9,12 @@ class Componentes:
         self.db.commit()
 
     def update(self, id_Componente, nombre_componente):
-        sql = "UPDATE componentes SET nombre_componente  = %s WHERE id_Componente = %s"
+        sql = "UPDATE componentes SET nombre_componente  = %s WHERE id_Componentes = %s"
         self.db.cursor.execute(sql, (nombre_componente, id_Componente))
         self.db.commit()
 
     def delete(self, id_Componente):
-        sql = "DELETE FROM componentes WHERE id_Componente = %s"
+        sql = "DELETE FROM componentes WHERE id_Componentes = %s"
         self.db.cursor.execute(sql, (id_Componente,))
         self.db.commit()
 
