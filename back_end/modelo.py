@@ -11,7 +11,7 @@ class Modelo:
         self.db.commit()
 
     def update(self, idModelo, Nombre_Modelo,año):
-        sql = "UPDATE modelo SET Nombre_Modelo = %s,año = %s WHERE idModelo = %s"
+        sql = "UPDATE modelo SET Nombre_Modelo = %s WHERE idModelo = %s"
         self.db.cursor.execute(sql, (Nombre_Modelo,año,idModelo))
         self.db.commit()
 
