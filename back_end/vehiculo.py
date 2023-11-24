@@ -9,10 +9,15 @@ class Vehiculo:
         self.db.commit()
           
 
-    def update(self, idVehiculo,Tipo_Vehiculo,Modelo_idModelo,año):
-         sql = "UPDATE vehiculo SET Tipo_Vehiculo = %s,Modelo_idModelo = %s,año = %s WHERE idVehiculo = %s"
-         self.db.cursor.execute(sql, (idVehiculo,Tipo_Vehiculo,Modelo_idModelo,año))
-         self.db.commit()
+    def update(self, idVehiculo, tipo_vehiculo, idModelo, año):
+        try:
+            sql = "UPDATE vehiculo SET Tipo_Vehiculo = %s, Modelo_idModelo = %s, año = %s WHERE idVehiculo = %s"
+            values = (tipo_vehiculo, idModelo, año, idVehiculo)
+            self.db.cursor.execute(sql, values)
+            self.db.commit()
+            print("Vehículo actualizado correctamente.")
+        except mysql.connector.Error as e:
+            print(f"Error al actualizar el vehículo: {e}")
 
     def delete(self, idVehiculo):
          sql = "DELETE FROM vehiculo WHERE idVehiculo = %s"

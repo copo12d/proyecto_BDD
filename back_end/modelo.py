@@ -10,9 +10,9 @@ class Modelo:
         self.db.cursor.execute(sql, (idModelo,Nombre_Modelo,Marca_idMarca))
         self.db.commit()
 
-    def update(self, idModelo, Nombre_Modelo,año):
+    def update(self, Nombre_Modelo,idModelo):
         sql = "UPDATE modelo SET Nombre_Modelo = %s WHERE idModelo = %s"
-        self.db.cursor.execute(sql, (Nombre_Modelo,año,idModelo))
+        self.db.cursor.execute(sql, (Nombre_Modelo,idModelo))
         self.db.commit()
 
     def delete(self, idModelo):

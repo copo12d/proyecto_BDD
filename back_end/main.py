@@ -15,7 +15,7 @@ import re
 
 def main():
     
-    db = Database("127.0.0.1","root","30412187","mydb")
+    db = Database("127.0.0.1","root","30412187","actucascada")
     marca = Marca(db)
     pieza = Piezas(db)
     modelo = Modelo(db)
@@ -114,6 +114,14 @@ def main():
                         
                         tablac()
                         
+                    def actualizar():
+                        global tabla
+                        Guardar.config(state=NORMAL)
+                        modelo.update(Nombre_Modeloentry.get(),int(idModeloentry.get()))
+                        Nuevo.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        tablac()
+                        
 
                     def editarbtn():
                         global tabla
@@ -145,8 +153,7 @@ def main():
                            
 
                     def guardarbtn():
-                        borrarbtn()  
-                        agregarbtn()
+                        actualizar()
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
                         
@@ -218,7 +225,7 @@ def main():
                     Cancelar=Button(modeloframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Cancelar.grid(row=4,column=2)
 
-                    Editar=Button(modeloframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar=Button(modeloframe, text="Editar", command=actualizar, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Editar.grid(row=8,column=0)
                     Eliminar=Button(modeloframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Eliminar.grid(row=8, column=1)
@@ -452,6 +459,15 @@ def main():
                         
                         tablac()
                         
+                    def actualizar():
+                        global tabla
+                        Guardar.config(state=NORMAL)
+                        
+                        vehiculo.update(int(idVehiculoentry.get()),Tipo_Vehiculoentry.get(),int(idModeloentry.get()), int(Añoentry.get()))
+                        Nuevo.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        tablac()
+                        
 
                     def editarbtn():
                         global tabla
@@ -485,8 +501,9 @@ def main():
                            
 
                     def guardarbtn():
-                        borrarbtn()  
-                        agregarbtn()
+                        
+                        actualizar()
+                        
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
                         
@@ -560,7 +577,7 @@ def main():
                     Cancelar=Button(vehiculoframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Cancelar.grid(row=4,column=2)
 
-                    Editar=Button(vehiculoframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar=Button(vehiculoframe, text="Editar", command=actualizar, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Editar.grid(row=8,column=0)
                     Eliminar=Button(vehiculoframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Eliminar.grid(row=8, column=1)
@@ -624,12 +641,18 @@ def main():
                         Nombre_Marcaentry.delete(0,END)
                         tablac()
                         
+                    def actualizar():
+                        global tabla
+                        Guardar.config(state=NORMAL)
+                        marca.update(Nombre_Marcaentry.get(),int(idMarcaentry.get()))
+                        Nuevo.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        tablac()
 
                     def editarbtn():
                         global tabla
                         Guardar.config(state=NORMAL)
-                        idMarcaentry.delete(0,END)
-                        Nombre_Marcaentry.delete(0,END)
+                        
                         idMarcavalor=tabla.item(tabla.selection())['values'][0]
                         Nombre_Marcavalor=tabla.item(tabla.selection())['values'][1]
                         idMarcaentry.insert(0, idMarcavalor)
@@ -647,8 +670,9 @@ def main():
                            
 
                     def guardarbtn():
-                        borrarbtn()  
-                        agregarbtn()
+                        
+                        actualizar()
+                        
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
                         
@@ -713,7 +737,7 @@ def main():
                     Cancelar=Button(marcaframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Cancelar.grid(row=4,column=2)
 
-                    Editar=Button(marcaframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar=Button(marcaframe, text="Editar", command=actualizar, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Editar.grid(row=8,column=0)
                     Eliminar=Button(marcaframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Eliminar.grid(row=8, column=1)
@@ -779,6 +803,15 @@ def main():
                         
                         tablac()
                         
+                    def actualizar():
+                        global tabla
+                        Guardar.config(state=NORMAL)
+                        
+                        componentes.update(Nombre_Componenteentry.get(),int(idComponenteentry.get()))
+                        Nuevo.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
+                        tablac()
+                        
 
                     def editarbtn():
                         global tabla
@@ -809,8 +842,9 @@ def main():
                            
 
                     def guardarbtn():
-                        borrarbtn()  
-                        agregarbtn()
+                        
+                        actualizar()
+                        
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
                         
@@ -881,7 +915,7 @@ def main():
                     Cancelar=Button(componentesframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Cancelar.grid(row=4,column=2)
 
-                    Editar=Button(componentesframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar=Button(componentesframe, text="Editar", command=actualizar, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Editar.grid(row=8,column=0)
                     Eliminar=Button(componentesframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Eliminar.grid(row=8, column=1)

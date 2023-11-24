@@ -8,7 +8,7 @@ class Componentes:
         self.db.cursor.execute(sql, (id_Componentes,Nombre_Componente,Vehiculo_idVehiculo))
         self.db.commit()
 
-    def update(self, id_Componentes, nombre_componente):
+    def update(self, nombre_componente,id_Componentes):
         sql = "UPDATE componentes SET nombre_componente  = %s WHERE id_Componentes = %s"
         self.db.cursor.execute(sql, (nombre_componente, id_Componentes))
         self.db.commit()
