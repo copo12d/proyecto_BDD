@@ -41,3 +41,13 @@ class Marca:
         except Exception as e:
             print(f"Error al obtener todos los modelos: {e}")
             return None
+        
+    def get_modelos_by_marca(self, nombre_marca):
+        try:
+            sql = "SELECT mo.Nombre_Modelo FROM modelo mo JOIN marca ma ON mo.Marca_idMarca = ma.idMarca WHERE ma.Nombre_Marca = %s"
+            self.db.cursor.execute(sql, (nombre_marca,))
+            result = self.db.cursor.fetchall()
+            return [row[0] for row in result]
+        except Exception as e:
+            print(f"Error al obtener modelos por marca: {e}")
+            return None

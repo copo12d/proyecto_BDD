@@ -15,13 +15,19 @@ import re
 
 def main():
     
-    db = Database("127.0.0.1","root","30412187","actucascada")
+    db = Database("127.0.0.1","root","30412187","mydb")
     marca = Marca(db)
     pieza = Piezas(db)
     modelo = Modelo(db)
     vehiculo = Vehiculo(db)
     componentes = Componentes(db)
+
+
+        
     
+
+        
+
     try:
         if db:
 
@@ -40,7 +46,6 @@ def main():
             ancho=image4.width()
             alto=image4.height()
             root.geometry(f"{ancho}x{alto}+100+100")
-            print(alto,ancho)
             rickroll=ImageTk.PhotoImage(Image.open("rickroll.jpg"))
 
             #---------DEFINIENDO LA FUNCION PARA MOSTRAR LOS FRAMES (Y ELIMINAR LA IMAGEN DE INICIO)---------
@@ -68,7 +73,7 @@ def main():
 
 
 
-
+            
 
             #---------FUNCIONES DE LOS BOTONES DEl MENU---------
 
@@ -89,6 +94,107 @@ def main():
 
 
 
+            def Cesparent(id):
+                # Conectarse a la base de datos
+                conn = mysql.connector.connect(user='root', password='30412187', host='127.0.0.1', database='mydb')
+                cursor = conn.cursor()
+
+                # Ejecutar una consulta para verificar si hay registros relacionados
+                query = f"SELECT * FROM piezas WHERE id_componente = {id}"
+                cursor.execute(query)
+                registros_relacionados = cursor.fetchall()
+
+                # Cerrar la conexión
+                cursor.close()
+                conn.close()
+
+                # Devolver True si hay registros relacionados, lo que significa que es una parent row
+                return len(registros_relacionados) > 0
+            
+
+
+            def Componentesesparent(id):
+                # Conectarse a la base de datos
+                conn = mysql.connector.connect(user='root', password='30412187', host='127.0.0.1', database='mydb')
+                cursor = conn.cursor()
+
+                # Ejecutar una consulta para verificar si hay registros relacionados
+                query = f"SELECT * FROM componentes WHERE id_componentes = {id}"
+                cursor.execute(query)
+                registros_relacionados = cursor.fetchall()
+
+                # Cerrar la conexión
+                cursor.close()
+                conn.close()
+
+                # Devolver True si hay registros relacionados, lo que significa que es una parent row
+                return len(registros_relacionados) > 0
+            
+
+
+            def Vehiculoesparent(id):
+                # Conectarse a la base de datos
+                conn = mysql.connector.connect(user='root', password='30412187', host='127.0.0.1', database='mydb')
+                cursor = conn.cursor()
+
+                # Ejecutar una consulta para verificar si hay registros relacionados
+                query = f"SELECT * FROM componentes WHERE Vehiculo_idVehiculo = {id}"
+                cursor.execute(query)
+                registros_relacionados = cursor.fetchall()
+
+                # Cerrar la conexión
+                cursor.close()
+                conn.close()
+
+                # Devolver True si hay registros relacionados, lo que significa que es una parent row
+                return len(registros_relacionados) > 0
+            
+
+
+
+            def Modeloesparent(id):
+                # Conectarse a la base de datos
+                conn = mysql.connector.connect(user='root', password='30412187', host='127.0.0.1', database='mydb')
+                cursor = conn.cursor()
+
+                # Ejecutar una consulta para verificar si hay registros relacionados
+                query = f"SELECT * FROM vehiculo WHERE Modelo_idModelo = {id}"
+                cursor.execute(query)
+                registros_relacionados = cursor.fetchall()
+
+                # Cerrar la conexión
+                cursor.close()
+                conn.close()
+
+                # Devolver True si hay registros relacionados, lo que significa que es una parent row
+                return len(registros_relacionados) > 0
+            
+
+
+            def Marcaesparent(id):
+                # Conectarse a la base de datos
+                conn = mysql.connector.connect(user='root', password='30412187', host='127.0.0.1', database='mydb')
+                cursor = conn.cursor()
+
+                # Ejecutar una consulta para verificar si hay registros relacionados
+                query = f"SELECT * FROM modelo WHERE Marca_idMarca = {id}"
+                cursor.execute(query)
+                registros_relacionados = cursor.fetchall()
+
+                # Cerrar la conexión
+                cursor.close()
+                conn.close()
+
+                # Devolver True si hay registros relacionados, lo que significa que es una parent row
+                return len(registros_relacionados) > 0
+            
+            
+            
+           
+                
+
+
+
 
             
 
@@ -98,12 +204,12 @@ def main():
 
              #---------WIDGETS DE LOS FRAMES DE LAS TABLAS---------
 
-            entrys=[]
+         
 
             def widgetstablas(frame):
                 global tam
                 if frame==modeloframe:
-
+                    
                     def agregarbtn():
                         
                         modelo.insert(int(idModeloentry.get()),Nombre_Modeloentry.get(),int(idMarcaentry.get()))
@@ -125,6 +231,8 @@ def main():
 
                     def editarbtn():
                         global tabla
+                        idModeloentry.config(state=NORMAL)
+                        idMarcaentry.config(state=NORMAL)
                         Guardar.config(state=NORMAL)
                         idModeloentry.delete(0,END)
                         Nombre_Modeloentry.delete(0,END)
@@ -139,6 +247,8 @@ def main():
                         idModeloentry.insert(0,idModelovalor)
                         Nombre_Modeloentry.insert(0,Nombre_Modelovalor)
                         idMarcaentry.insert(0,idMarcavalor)
+                        idModeloentry.config(state=DISABLED)
+                        idMarcaentry.config(state=DISABLED)
                         
                         Nuevo.config(state=DISABLED)
                         Agregar.config(state=DISABLED)
@@ -147,13 +257,28 @@ def main():
                     def borrarbtn():
                         global tabla
                         id_modelo=tabla.item(tabla.selection())['values'][0]
-                        modelo.delete(id_modelo)
-                        Nuevo.config(state=NORMAL)
-                        tablac()
+                        if Modeloesparent(id_modelo):
+                            mensaje=messagebox.askyesno("Advertencia", "¿Estás seguro de que quieres eliminar este registro? Es un Parent Row, por lo que se eliminarán todos los Child Rows de otras tablas.")
+                            if mensaje=='yes':
+                                modelo.delete(id_modelo)
+                                Nuevo.config(state=NORMAL)
+                                tablac()
+                            else:
+                                tablac()
+                        else:
+                            modelo.delete(id_modelo)
+                            Nuevo.config(state=NORMAL)
+                            tablac()
+
                            
 
                     def guardarbtn():
+                        idModeloentry.config(state=NORMAL)
+                        idMarcaentry.config(state=NORMAL)
                         actualizar()
+                        idModeloentry.delete(0,END)
+                        Nombre_Modeloentry.delete(0,END)
+                        idMarcaentry.delete(0,END)
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
                         
@@ -164,12 +289,18 @@ def main():
 
 
                     def nuevobtn():
+                        global tabla
                         idModeloentry.delete(0,END)
                         Nombre_Modeloentry.delete(0,END)
                         idMarcaentry.delete(0,END)
                         
-                        
+
+                        tabla.selection_remove(tabla.selection())
+                        Editar.config(state=DISABLED)
+                        Eliminar.config(state=DISABLED)
                         Agregar.config(state=NORMAL)
+
+
                     
                     def elementos(event=NONE):
                         global tabla
@@ -225,7 +356,7 @@ def main():
                     Cancelar=Button(modeloframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Cancelar.grid(row=4,column=2)
 
-                    Editar=Button(modeloframe, text="Editar", command=actualizar, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar=Button(modeloframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Editar.grid(row=8,column=0)
                     Eliminar=Button(modeloframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Eliminar.grid(row=8, column=1)
@@ -269,10 +400,12 @@ def main():
 
                         tabla.grid(row=6,column=0,columnspan=3, sticky="nsew")
                         tabla.bind("<<TreeviewSelect>>", elementos)
+                        
 
                     
                     tablac()
                     elementos()
+                 
 
 
 
@@ -292,6 +425,8 @@ def main():
 
                     def editarbtn():
                         global tabla
+                        id_piezasentry.config(state=NORMAL)
+                        id_Componenteentry.config(state=NORMAL)
                         Guardar.config(state=NORMAL)
                         id_piezasentry.delete(0,END)
                         nombre_piezaentry.delete(0,END)
@@ -309,6 +444,9 @@ def main():
                         nombre_piezaentry.insert(0,nombrepiezavalor)
                         descripcionentry.insert(0,descripcionvalor)
                         id_Componenteentry.insert(0,idcomponentevalor)
+
+                        id_piezasentry.config(state=DISABLED)
+                        id_Componenteentry.config(state=DISABLED)
                         
                         Nuevo.config(state=DISABLED)
                         Agregar.config(state=DISABLED)
@@ -316,18 +454,30 @@ def main():
                      
                     def borrarbtn():
                         global tabla
+
                         idpiezas=tabla.item(tabla.selection())['values'][0]
+                        
                         pieza.delete(idpiezas)
                         Nuevo.config(state=NORMAL)
                         tablac()
                            
 
                     def guardarbtn():
-                        borrarbtn()  
+                        borrarbtn()
                         agregarbtn()
+                        id_piezasentry.config(state=NORMAL)
+                        id_Componenteentry.config(state=NORMAL)
+                        Guardar.config(state=NORMAL)
+                        id_piezasentry.delete(0,END)
+                        nombre_piezaentry.delete(0,END)
+                        descripcionentry.delete(0,END)
+                        id_Componenteentry.delete(0,END)
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
-                        
+                        tabla.selection_remove(tabla.selection())
+                        Editar.config(state=DISABLED)
+                        Eliminar.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
                         
                     
                     registros=pieza.get_all_piezas()
@@ -347,7 +497,6 @@ def main():
                         if tabla.selection():
                             Editar.config(state=NORMAL)
                             Eliminar.config(state=NORMAL)
-
                     
 
                     def cancelarbtn():
@@ -472,6 +621,8 @@ def main():
                     def editarbtn():
                         global tabla
                         Guardar.config(state=NORMAL)
+                        idVehiculoentry.config(state=NORMAL)
+                        idModeloentry.config(state=NORMAL)
                         idVehiculoentry.delete(0,END)
                         Tipo_Vehiculoentry.delete(0,END)
                         idModeloentry.delete(0,END)
@@ -481,13 +632,14 @@ def main():
                         idVehiculovalor=tabla.item(tabla.selection())['values'][0]
                         Tipo_Vehiculovalor=tabla.item(tabla.selection())['values'][1]
                         idModelovalor=tabla.item(tabla.selection())['values'][2]
-                        Añoentryvalor=tabla.item(tabla.selection())['values'][2]
+                        Añoentryvalor=tabla.item(tabla.selection())['values'][3]
                         
                         idVehiculoentry.insert(0,idVehiculovalor)
                         Tipo_Vehiculoentry.insert(0,Tipo_Vehiculovalor)
                         idModeloentry.insert(0,idModelovalor)
                         Añoentry.insert(0,Añoentryvalor)
-                        
+                        idVehiculoentry.config(state=DISABLED)
+                        idModeloentry.config(state=DISABLED)
                         Nuevo.config(state=DISABLED)
                         Agregar.config(state=DISABLED)
                         
@@ -495,17 +647,33 @@ def main():
                     def borrarbtn():
                         global tabla
                         idVehiculo=tabla.item(tabla.selection())['values'][0]
-                        vehiculo.delete(idVehiculo)
+                        if Vehiculoesparent(idVehiculo):
+                            mensaje=messagebox.askyesno("Advertencia", "¿Estás seguro de que quieres eliminar este registro? Es un Parent Row, por lo que se eliminarán todos los Child Rows de otras tablas.")
+                            if mensaje=='yes':
+                                vehiculo.delete(idVehiculo)
+                                
+                            else:
+                                pass
+                        else:
+                            vehiculo.delete(idVehiculo)
+
                         Nuevo.config(state=NORMAL)
                         tablac()
                            
 
                     def guardarbtn():
-                        
+                        idVehiculoentry.config(state=NORMAL)
+                        idModeloentry.config(state=NORMAL)
                         actualizar()
-                        
+                        idVehiculoentry.delete(0,END)
+                        Tipo_Vehiculoentry.delete(0,END)
+                        idModeloentry.delete(0,END)
+                        Añoentry.delete(0,END)
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
+                        Editar.config(state=DISABLED)
+                        Eliminar.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
                         
                         
                     
@@ -577,7 +745,7 @@ def main():
                     Cancelar=Button(vehiculoframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Cancelar.grid(row=4,column=2)
 
-                    Editar=Button(vehiculoframe, text="Editar", command=actualizar, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar=Button(vehiculoframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Editar.grid(row=8,column=0)
                     Eliminar=Button(vehiculoframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Eliminar.grid(row=8, column=1)
@@ -633,7 +801,7 @@ def main():
 
                     
                 elif frame==marcaframe:
-                    
+
                     def agregarbtn():
                         
                         marca.insert(int(idMarcaentry.get()),Nombre_Marcaentry.get())
@@ -651,12 +819,16 @@ def main():
 
                     def editarbtn():
                         global tabla
+                        idMarcaentry.config(state=NORMAL)
                         Guardar.config(state=NORMAL)
-                        
+                        idMarcaentry.delete(0,END)
+                        Nombre_Marcaentry.delete(0,END)
                         idMarcavalor=tabla.item(tabla.selection())['values'][0]
                         Nombre_Marcavalor=tabla.item(tabla.selection())['values'][1]
+                        
                         idMarcaentry.insert(0, idMarcavalor)
                         Nombre_Marcaentry.insert(0, Nombre_Marcavalor)
+                        idMarcaentry.config(state=DISABLED)
                         Nuevo.config(state=DISABLED)
                         Agregar.config(state=DISABLED)
                         
@@ -664,7 +836,16 @@ def main():
                     def borrarbtn():
                         global tabla
                         id_marca=tabla.item(tabla.selection())['values'][0]
-                        marca.delete(id_marca)
+                        if Marcaesparent(id_marca):
+                            mensaje=messagebox.askyesno("Advertencia", "¿Estás seguro de que quieres eliminar este registro? Es un Parent Row, por lo que se eliminarán todos los Child Rows de otras tablas.")
+                            if mensaje=='yes':
+                                marca.delete(id_marca)
+                                
+                            else:
+                                pass
+                        else:
+                            marca.delete(id_marca)
+                       
                         Nuevo.config(state=NORMAL)
                         tablac()
                            
@@ -683,6 +864,7 @@ def main():
 
 
                     def nuevobtn():
+                        idMarcaentry.config(state=NORMAL)
                         idMarcaentry.delete(0,END)
                         Nombre_Marcaentry.delete(0,END)
                         
@@ -737,7 +919,7 @@ def main():
                     Cancelar=Button(marcaframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Cancelar.grid(row=4,column=2)
 
-                    Editar=Button(marcaframe, text="Editar", command=actualizar, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar=Button(marcaframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Editar.grid(row=8,column=0)
                     Eliminar=Button(marcaframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Eliminar.grid(row=8, column=1)
@@ -815,7 +997,10 @@ def main():
 
                     def editarbtn():
                         global tabla
+                        idComponenteentry.config(state=NORMAL)
+                        idVehiculoentry.config(state=NORMAL)
                         Guardar.config(state=NORMAL)
+
                         idComponenteentry.delete(0,END)
                         Nombre_Componenteentry.delete(0,END)
                         idVehiculoentry.delete(0,END)
@@ -828,6 +1013,9 @@ def main():
                         idComponenteentry.insert(0, idComponentevalor)
                         Nombre_Componenteentry.insert(0, Nombre_Componentevalor)
                         idVehiculoentry.insert(0, idVehiculovalor)
+
+                        idComponenteentry.config(state=DISABLED)
+                        idVehiculoentry.config(state=DISABLED)
                         
                         Nuevo.config(state=DISABLED)
                         Agregar.config(state=DISABLED)
@@ -836,14 +1024,31 @@ def main():
                     def borrarbtn():
                         global tabla
                         idComponente=tabla.item(tabla.selection())['values'][0]
-                        componentes.delete(idComponente)
+                        if Componentesesparent(idComponente):
+                            mensaje=messagebox.askyesno("Advertencia", "¿Estás seguro de que quieres eliminar este registro? Es un Parent Row, por lo que se eliminarán todos los Child Rows de otras tablas.")
+                            if mensaje=='yes':
+                                componentes.delete(idComponente)
+                                
+                            else:
+                                pass
+                        else:
+                            componentes.delete(idComponente)
+                        
                         Nuevo.config(state=NORMAL)
                         tablac()
                            
 
                     def guardarbtn():
-                        
                         actualizar()
+                        idComponenteentry.config(state=NORMAL)
+                        idVehiculoentry.config(state=NORMAL)
+                        idComponenteentry.delete(0,END)
+                        Nombre_Componenteentry.delete(0,END)
+                        idVehiculoentry.delete(0,END)
+                        tabla.selection_remove(tabla.selection())
+                        Editar.config(state=DISABLED)
+                        Eliminar.config(state=DISABLED)
+                        Agregar.config(state=DISABLED)
                         
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
@@ -915,7 +1120,7 @@ def main():
                     Cancelar=Button(componentesframe, text="Cancelar", command=cancelarbtn, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Cancelar.grid(row=4,column=2)
 
-                    Editar=Button(componentesframe, text="Editar", command=actualizar, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
+                    Editar=Button(componentesframe, text="Editar", command=editarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Editar.grid(row=8,column=0)
                     Eliminar=Button(componentesframe, text="Eliminar", command=borrarbtn, state=DISABLED, padx=17, pady=10, highlightthickness=0 , bg='#ff3f4a',fg="white", relief="raised",font=('crushed', 13))
                     Eliminar.grid(row=8, column=1)
@@ -1096,12 +1301,12 @@ def main():
             
             
     except mysql.connector.Error as e:
-        print(f"hubo un error en la coneccion{e}")
+        print(f"Hubo un error en la conexión{e}")
     
     finally:  
         if db:
             db.close_connection()
-            print("finalizo la conexion")
+            print("Finalizó la conexión.")
     
 
 if __name__=="__main__":

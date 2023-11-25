@@ -39,3 +39,13 @@ class Componentes:
         except Exception as e:
             print(f"Error al obtener todos los componentes: {e}")
             return None
+        
+    def get_piezas_by_componente(self, nombre_componente):
+        try:
+            sql = "SELECT pi.nombre_pieza FROM piezas pi JOIN componentes co ON pi.id_Componente = co.id_Componentes WHERE co.Nombre_Componente = %s"
+            self.db.cursor.execute(sql, (nombre_componente,))
+            result = self.db.cursor.fetchall()
+            return [row[0] for row in result]
+        except Exception as e:
+            print(f"Error al obtener piezas por componente: {e}")
+            return None

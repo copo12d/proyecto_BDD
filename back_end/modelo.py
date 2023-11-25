@@ -41,4 +41,14 @@ class Modelo:
         except Exception as e:
             print(f"Error al obtener todos los modelos: {e}")
             return None
+        
+    def get_componentes_by_modelo(self, nombre_modelo):
+        try:
+            sql = "SELECT co.Nombre_Componente FROM componentes co JOIN vehiculo ve ON co.Vehiculo_idVehiculo = ve.idVehiculo JOIN modelo mo ON ve.Modelo_idModelo = mo.idModelo WHERE mo.Nombre_Modelo = %s"
+            self.db.cursor.execute(sql, (nombre_modelo,))
+            result = self.db.cursor.fetchall()
+            return [row[0] for row in result]
+        except Exception as e:
+            print(f"Error al obtener componentes por modelo: {e}")
+            return None
             
