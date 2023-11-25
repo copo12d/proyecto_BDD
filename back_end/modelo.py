@@ -6,7 +6,7 @@ class Modelo:
         self.db = db
 
     def insert(self, idModelo,Nombre_Modelo,Marca_idMarca):
-        sql = "INSERT INTO modelo VALUES (%s,%s,%s,%s)"
+        sql = "INSERT INTO modelo VALUES (%s,%s,%s)"
         self.db.cursor.execute(sql, (idModelo,Nombre_Modelo,Marca_idMarca))
         self.db.commit()
 

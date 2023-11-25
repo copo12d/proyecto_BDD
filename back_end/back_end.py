@@ -11,10 +11,11 @@ class Database:
                 database=database
             )
             if self.conn.is_connected:
-                print("conexion exitosa")
+                print("Conexión exitosa.")
                 self.cursor = self.conn.cursor()
+                
         except Error as ex:
-            print("la conecxion fallo:",ex)
+            print("La conexión falló:",ex)
 
     def close_connection(self):
         try:
@@ -22,7 +23,7 @@ class Database:
                 self.cursor.close()
                 self.conn.close()
         except Error as ex:
-            print(f"ocurrio un error{ex}")            
+            print(f"Ocurrió un error{ex}")            
     def commit(self):
         try:
             self.conn.commit()

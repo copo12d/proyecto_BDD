@@ -20,8 +20,8 @@ class Piezas:
 
     def update(self, id_Piezas, Nombre_Pieza,descripcion):
         try:
-            sql = "UPDATE piezas SET Nombre_Pieza = %s, descripcion = %s WHERE id_Pieza = %s"
-            self.db.cursor.execute(sql, (id_Piezas,Nombre_Pieza,descripcion ))
+            sql = "UPDATE piezas SET nombre_pieza = %s, descripcion = %s WHERE id_piezas = %s"
+            self.db.cursor.execute(sql, (id_Piezas,Nombre_Pieza,descripcion))
             self.db.commit()
         except mysql.connector.Error as ex:
             print(f"fallo la conecxion {ex}")
