@@ -23,18 +23,14 @@ def main():
     componentes = Componentes(db)
 
 
-        
-    
-
-        
 
     try:
         if db:
 
 
 
-
         #---------DEFINIENDO LA RAIZ Y LA IMAGEN DEL INICIO---------
+
 
             root=Tk()
 
@@ -46,9 +42,10 @@ def main():
             ancho=image4.width()
             alto=image4.height()
             root.geometry(f"{ancho}x{alto}+100+100")
-            rickroll=ImageTk.PhotoImage(Image.open("rickroll.jpg"))
 
-            #---------DEFINIENDO LA FUNCION PARA MOSTRAR LOS FRAMES (Y ELIMINAR LA IMAGEN DE INICIO)---------
+
+
+            #---------DEFINIENDO EL INICIO Y LA FUNCION PARA MOSTRAR LOS FRAMES (Y ELIMINAR LA IMAGEN DE INICIO)---------
 
             def mostrarframe(frame):
                 
@@ -59,7 +56,7 @@ def main():
                 if frame==vehiculoframe or frame==componentesframe or frame==piezasframe or frame==marcaframe or frame==modeloframe:
                     widgetstablas(frame)
                     
-                
+
 
 
             def iniciobtn():
@@ -72,10 +69,7 @@ def main():
         
 
 
-
-            
-
-            #---------FUNCIONES DE LOS BOTONES DEl MENU---------
+            #-------------FUNCIONES DE LOS BOTONES DEl MENU------------
 
             def tablacomponentes():
                 mostrarframe(componentesframe)
@@ -93,24 +87,7 @@ def main():
                 mostrarframe(modeloframe)
 
 
-
-            def Cesparent(id):
-                # Conectarse a la base de datos
-                conn = mysql.connector.connect(user='root', password='0704', host='127.0.0.1', database='proyecto')
-                cursor = conn.cursor()
-
-                # Ejecutar una consulta para verificar si hay registros relacionados
-                query = f"SELECT * FROM piezas WHERE id_componente = {id}"
-                cursor.execute(query)
-                registros_relacionados = cursor.fetchall()
-
-                # Cerrar la conexión
-                cursor.close()
-                conn.close()
-
-                # Devolver True si hay registros relacionados, lo que significa que es una parent row
-                return len(registros_relacionados) > 0
-            
+            #---------------FUNCIONES PARA VERIFICAR SI UNA ROW ES PARENT-------------
 
 
             def Componentesesparent(id):
@@ -207,7 +184,7 @@ def main():
          
 
             def widgetstablas(frame):
-                global tam
+                
                 if frame==modeloframe:
                     
                     def agregarbtn():
@@ -281,7 +258,8 @@ def main():
                         idMarcaentry.delete(0,END)
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
-                        
+                        Editar.config(state=DISABLED)
+                        Eliminar.config(state=DISABLED)
                         
                     
                     registros=modelo.get_all_modelos()
@@ -406,7 +384,6 @@ def main():
                     tablac()
                     elementos()
                  
-
 
 
                 elif frame==piezasframe:
@@ -591,7 +568,6 @@ def main():
                     
                     tablac()
                     elementos()
-                    
 
 
 
@@ -794,9 +770,6 @@ def main():
                     
                     tablac()
                     elementos()
-                    
-
-
 
 
                     
@@ -851,11 +824,17 @@ def main():
                            
 
                     def guardarbtn():
+                        idMarcaentry.config(state=NORMAL)
+                        
                         
                         actualizar()
-                        
+                        idMarcaentry.delete(0,END)
+                        Nombre_Marcaentry.delete(0,END)
+                        Editar.config(state=DISABLED)
+                        Eliminar.config(state=DISABLED)
                         Guardar.config(state=DISABLED)
                         Nuevo.config(state=NORMAL)
+
                         
                         
                     
@@ -867,7 +846,7 @@ def main():
                         idMarcaentry.config(state=NORMAL)
                         idMarcaentry.delete(0,END)
                         Nombre_Marcaentry.delete(0,END)
-                        
+                        tabla.selection_remove(tabla.selection())
                         Agregar.config(state=NORMAL)
                     
                     def elementos(event=NONE):
@@ -967,11 +946,6 @@ def main():
                     elementos()
                     
                     
-
-                    
-                        
-                    
-                        
 
                 elif frame==componentesframe:
                     
@@ -1173,12 +1147,6 @@ def main():
 
 
 
-
-
-
-
-
-
             #---------DEFINIENDO LOS FRAMES---------
 
             menuframe=Frame(root)
@@ -1215,12 +1183,16 @@ def main():
 
             #---------DEFINIENDO Y MOSTRANDO LOS LABELS---------
 
+            #Labels principales
+
             label_menuframe=Label(menuframe)
             label_menuframe.grid(row=0,column=0)
             label_consultasframe=Label(consultasframe)
             label_consultasframe.grid(row=0,column=0)
             label_ayudaframe=Label(ayudaframe)
             label_ayudaframe.grid(row=0,column=0)
+
+            #Labels de las imagenes 
 
             label_imagenvehiculo=Label(menuframe, image=imagenvehiculo).grid(row=5,column=1)
             label_imagenmodelo=Label(menuframe, image=imagenmodelo).grid(row=5,column=2)
@@ -1230,8 +1202,7 @@ def main():
             llabelrickroll=Label(ayudaframe, text="rickrolleado pa").grid(row=0,column=0)
             labelrickroll=Label(ayudaframe, image=imagenrickroll).grid(row=1, column=0)
 
-
-
+            #Widgets del menuframe
 
 
             labelelige=Label(menuframe,text="ELIGE LA TABLA", bg="#92b0c6", font=('crushed', 20, 'bold')).grid(row=1,column=1, columnspan=5)
@@ -1257,7 +1228,7 @@ def main():
 
 
 
-
+            #-----------------BARRA SUPERIOR-------------------
 
 
             BarraSuperior=Menu(root)
@@ -1269,36 +1240,14 @@ def main():
             BarraSuperior.add_command(label="Ayuda", command=lambda:mostrarframe(ayudaframe))
 
 
-
-
-
             root.config(menu=BarraSuperior)
+
+
+
 
 
             root.mainloop()
 
-            def submit():
-                #clear the text boxes
-                try: 
-                    '''componentes.insert(int(id_.get()), Nombre_Componente.get(), int(Vehiculo_idVehiculo.get()), int(Vehiculo_Modelo_idModelo.get()))
-                    idComponente.delete(0,END)
-                    Nombre_Componente.delete(0,END)
-                    Vehiculo_idVehiculo.delete(0,END)
-                    Vehiculo_Modelo_idModelo.delete(0,END)'''
-
-                except:
-                    messagebox.showerror("Error", "Intentalo de nuevo.")
-                    '''idComponente.delete(0,END)
-                    Nombre_Componente.delete(0,END)
-                    Vehiculo_idVehiculo.delete(0,END)
-                    Vehiculo_Modelo_idModelo.delete(0,END)'''
-
-
-
-            
-
-
-            
             
     except mysql.connector.Error as e:
         print(f"Hubo un error en la conexión{e}")
@@ -1311,11 +1260,3 @@ def main():
 
 if __name__=="__main__":
     main()
-    
-            
-    
-
-
-    
-    
-    
