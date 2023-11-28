@@ -1,4 +1,11 @@
 import mysql.connector
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+import io
+from tkinter import messagebox
 class Vehiculo:
     def __init__(self, db):
         self.db = db
@@ -33,3 +40,42 @@ class Vehiculo:
         except Exception as e:
             print(f"Error al obtener todos los modelos: {e}")
             return None
+
+    def generate_vehiculo_pdf(self):
+        sql = "SELECT Tipo_Vehiculo, año FROM vehiculo;"
+        self.db.cursor.execute(sql)
+        resultados = self.db.cursor.fetchall()
+        pdf_filename = "vehiculos.pdf"
+
+        buffer = io.BytesIO()
+        elements = []
+        styles = getSampleStyleSheet()
+        style_heading = styles['Heading1']
+        style_normal = styles['Normal']
+
+        elements.append(Paragraph("Registro de Vehículos", style_heading))
+
+        data = [["Tipo de vehículo", "Año"]]
+        for registro in resultados:
+            tipo_vehiculo = str(registro[0])
+            año = str(registro[1])
+            data.append([tipo_vehiculo, año])
+
+        # Creamos la tabla
+        tabla = Table(data, colWidths=[200, 50])
+        tabla.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                                ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
+
+        elements.append(tabla)
+        pdf = SimpleDocTemplate(buffer, pagesize=letter)
+        pdf.build(elements)
+
+        with open(pdf_filename, "wb") as f:
+            f.write(buffer.getvalue())
+
+        mensajito=messagebox.showinfo("SIUUUU",f"Se ha generado el archivo PDF: {pdf_filename}")
