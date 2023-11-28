@@ -8,7 +8,7 @@ from vehiculo import Vehiculo
 from componentes import Componentes
 class MyApp:
     def __init__(self, root):
-        self.db = Database("127.0.0.1", "root", "0704", "proyecto")  # Reemplaza con tus credenciales
+        self.db = Database("127.0.0.1", "root", "30412187", "mydb")  # Reemplaza con tus credenciales
         self.marca = Marca(self.db)
         self.pieza = Piezas(self.db)
         self.modelo = Modelo(self.db)
@@ -40,15 +40,14 @@ class MyApp:
 
     def cargar_modelos(self, event):
         marca_seleccionada = self.marca_combobox.get()
-        modelos = self.modelo.get_all_modelo_names()
+        modelos = self.marca.get_modelos_by_marca(marca_seleccionada)
         if modelos:
             self.modelo_combobox['values'] = modelos
-            self.modelo_combobox.current(0)  # Seleccionar el primer elemento por defecto
+            self.modelo_combobox.current(0) # Seleccionar el primer elemento por defecto
 
     def cargar_componentes(self, event):
-        marca_seleccionada = self.marca_combobox.get()
         modelo_seleccionado = self.modelo_combobox.get()
-        componentes = self.componente.get_all_componente_names()
+        componentes = self.modelo.get_componentes_by_modelo(modelo_seleccionado)
         if componentes:
             self.componente_combobox['values'] = componentes
             self.componente_combobox.current(0)  # Seleccionar el primer elemento por defecto
@@ -58,8 +57,8 @@ class MyApp:
         modelo_seleccionado = self.modelo_combobox.get()
         componente_seleccionado = self.componente_combobox.get()
 
-        # Obtener los resultados y mostrarlos en el Text
-        resultados = self.pieza.get_all_piezas(marca_seleccionada, modelo_seleccionado, componente_seleccionado)
+        # Aquí deberías ejecutar la consulta con los parámetros seleccionados
+        resultados = self.pieza.get_all_piezass(marca_seleccionada, modelo_seleccionado, componente_seleccionado)
         self.resultados_text.delete('1.0', tk.END)  # Limpiar el Text
         if resultados:
             for resultado in resultados:

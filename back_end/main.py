@@ -5,6 +5,7 @@ from marca import Marca
 from modelo import Modelo
 from vehiculo import Vehiculo
 from componentes import Componentes
+from consultas import MyApp
 from tkinter import *
 from PIL import Image, ImageTk
 from tkinter import messagebox
@@ -15,7 +16,7 @@ import re
 
 def main():
     
-    db = Database("127.0.0.1","root","0704","proyecto")
+    db = Database("127.0.0.1","root","0704","proyecto2")
     marca = Marca(db)
     pieza = Piezas(db)
     modelo = Modelo(db)
@@ -44,16 +45,26 @@ def main():
             root.geometry(f"{ancho}x{alto}+100+100")
 
 
-
+            ejecutar=True
             #---------DEFINIENDO EL INICIO Y LA FUNCION PARA MOSTRAR LOS FRAMES (Y ELIMINAR LA IMAGEN DE INICIO)---------
 
             def mostrarframe(frame):
                 
                 for f in frames:
                     f.pack_forget()
+                
+
+                if frame==consultassframe:
+                    consultasframebtn()
+                    tablac()
+                    
+
                 frame.pack(expand=False)
                 label_inicio.pack_forget()
+                
+                
                 if frame==vehiculoframe or frame==componentesframe or frame==piezasframe or frame==marcaframe or frame==modeloframe:
+                    
                     widgetstablas(frame)
                     
 
@@ -66,14 +77,22 @@ def main():
 
                 label_inicio.pack()
 
+            def consultasframebtn():
+                
+                for f in frames:
+                    f.pack_forget()
+                MyApp(consultassframe)
+
         
 
 
             #-------------FUNCIONES DE LOS BOTONES DEl MENU------------
 
+           
+
             def tablacomponentes():
                 mostrarframe(componentesframe)
-
+                    
             def tablavehiculo():
                 mostrarframe(vehiculoframe)
 
@@ -85,6 +104,8 @@ def main():
 
             def tablamodelo():
                 mostrarframe(modeloframe)
+
+            
 
 
             #---------------FUNCIONES PARA VERIFICAR SI UNA ROW ES PARENT-------------
@@ -111,7 +132,7 @@ def main():
 
             def Vehiculoesparent(id):
                 # Conectarse a la base de datos
-                conn = mysql.connector.connect(user='root', password='0704', host='127.0.0.1', database='proyecto')
+                conn = mysql.connector.connect(user='root', password='0704', host='127.0.0.1', database='proyecto')                
                 cursor = conn.cursor()
 
                 # Ejecutar una consulta para verificar si hay registros relacionados
@@ -126,7 +147,6 @@ def main():
                 # Devolver True si hay registros relacionados, lo que significa que es una parent row
                 return len(registros_relacionados) > 0
             
-
 
 
             def Modeloesparent(id):
@@ -236,7 +256,7 @@ def main():
                         id_modelo=tabla.item(tabla.selection())['values'][0]
                         if Modeloesparent(id_modelo):
                             mensaje=messagebox.askyesno("Advertencia", "¿Estás seguro de que quieres eliminar este registro? Es un Parent Row, por lo que se eliminarán todos los Child Rows de otras tablas.")
-                            if mensaje=='yes':
+                            if mensaje:
                                 modelo.delete(id_modelo)
                                 Nuevo.config(state=NORMAL)
                                 tablac()
@@ -625,7 +645,7 @@ def main():
                         idVehiculo=tabla.item(tabla.selection())['values'][0]
                         if Vehiculoesparent(idVehiculo):
                             mensaje=messagebox.askyesno("Advertencia", "¿Estás seguro de que quieres eliminar este registro? Es un Parent Row, por lo que se eliminarán todos los Child Rows de otras tablas.")
-                            if mensaje=='yes':
+                            if mensaje:
                                 vehiculo.delete(idVehiculo)
                                 
                             else:
@@ -809,16 +829,17 @@ def main():
                     def borrarbtn():
                         global tabla
                         id_marca=tabla.item(tabla.selection())['values'][0]
+                        
                         if Marcaesparent(id_marca):
                             mensaje=messagebox.askyesno("Advertencia", "¿Estás seguro de que quieres eliminar este registro? Es un Parent Row, por lo que se eliminarán todos los Child Rows de otras tablas.")
-                            if mensaje=='yes':
+                            if mensaje:
                                 marca.delete(id_marca)
-                                
+                            
                             else:
                                 pass
                         else:
                             marca.delete(id_marca)
-                       
+                        
                         Nuevo.config(state=NORMAL)
                         tablac()
                            
@@ -1000,7 +1021,7 @@ def main():
                         idComponente=tabla.item(tabla.selection())['values'][0]
                         if Componentesesparent(idComponente):
                             mensaje=messagebox.askyesno("Advertencia", "¿Estás seguro de que quieres eliminar este registro? Es un Parent Row, por lo que se eliminarán todos los Child Rows de otras tablas.")
-                            if mensaje=='yes':
+                            if mensaje:
                                 componentes.delete(idComponente)
                                 
                             else:
@@ -1143,7 +1164,38 @@ def main():
                     tablac()
                     elementos()
 
+              
                     
+            def tablac(): 
+                        
+                global tabla
+
+                tabla=ttk.Treeview(consultassframe, columns=(1,2,3), show="headings")
+                        
+                scroll=ttk.Scrollbar(consultassframe, orient=VERTICAL, command= tabla.yview)
+                scroll.grid(row=6, column=3, sticky=NSEW)
+                tabla.configure(yscrollcommand=scroll.set)
+
+                tabla.heading(1, text="idComponentes")
+                tabla.heading(2, text="Nombre_Componentes")
+                tabla.heading(3, text="idVehiculo")
+                        
+                            
+                            
+                for item in tabla.get_children():
+                    tabla.delete(item)
+
+                registros=componentes.get_all_componentes()
+                        
+                        
+                        
+
+                for registro in registros:
+                    tabla.insert("", "end", values=registro)
+
+                tabla.grid(row=5,column=0,columnspan=3, sticky="nsew")
+                
+            
 
 
 
@@ -1158,9 +1210,73 @@ def main():
             marcaframe=Frame(root)
             piezasframe=Frame(root)
 
+            consultassframe=Frame(root)
+            registrosframe=Frame(root)
 
 
-            frames=[menuframe, consultasframe, ayudaframe, componentesframe, vehiculoframe, modeloframe, marcaframe, piezasframe]
+
+
+            frames=[menuframe, consultasframe, ayudaframe, componentesframe, vehiculoframe, modeloframe, marcaframe, piezasframe, consultassframe, registrosframe]
+
+            #-------------WIDGETS DE CONSULTASFRAME--------
+
+
+            def registrosbtn():
+                mostrarframe(registrosframe)
+
+            def consultasbtn():
+                mostrarframe(consultassframe)
+
+            registros=Button(consultasframe, text="Registros", command=registrosbtn)
+            consultas=Button(consultasframe, text="Consultas", command=consultasbtn)
+
+
+            registros.grid(row=0,column=0)
+            consultas.grid(row=1, column=0)
+
+
+
+            #-----------------LO DE REGISTROS--------------------
+
+
+            imagenpiezass=ImageTk.PhotoImage(Image.open("piezas.png"))
+            imagenmodelos=ImageTk.PhotoImage(Image.open("modelo.png"))
+            imagenmarcas=ImageTk.PhotoImage(Image.open("marca.png"))
+            imagenvehiculos=ImageTk.PhotoImage(Image.open("carro.png"))
+            imagencomponentess=ImageTk.PhotoImage(Image.open("componentes.png"))
+            imagenrickrolls=ImageTk.PhotoImage(Image.open("rickroll.jpg"))
+
+            label_imagenvehiculos=Label(registrosframe, image=imagenvehiculos).grid(row=5,column=1)
+            label_imagenmodelos=Label(registrosframe, image=imagenmodelos).grid(row=5,column=2)
+            label_imagenmarcas=Label(registrosframe, image=imagenmarcas).grid(row=5,column=3)
+            label_imagenpiezass=Label(registrosframe, image=imagenpiezass).grid(row=5,column=4)
+            label_imagencomponentess=Label(registrosframe,image=imagencomponentess).grid(row=5,column=5)
+            
+
+            labeleliges=Label(registrosframe,text="ELIGE LA TABLA", bg="#92b0c6", font=('crushed', 20, 'bold')).grid(row=1,column=1, columnspan=5)
+            labelespacio1s=Label(registrosframe,text="              ", font=('crushed', 20, 'bold')).grid(row=0,column=1, columnspan=5)
+            labelespacio2s=Label(registrosframe,text="              ", font=('crushed', 20, 'bold')).grid(row=2,column=1, columnspan=5)
+            labelespacio3s=Label(registrosframe,text="              ", font=('crushed', 20, 'bold')).grid(row=4,column=1, columnspan=5)
+
+            vehiculoss=Button(registrosframe, text="VEHICULO", padx=17, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
+            vehiculoss.grid(row=3,column=1)
+
+            modeloss=Button(registrosframe, text="MODELO", command=lambda:mostrarframe(registrosframe), padx=17, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
+            modeloss.grid(row=3,column=2)
+
+            marcass=Button(registrosframe, text="MARCA", command=lambda:mostrarframe(registrosframe), padx=17, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
+            marcass.grid(row=3,column=3)
+
+            piezasss=Button(registrosframe, text="PIEZAS", command=lambda:pieza.generate_pdf("Piezas"), padx=17, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
+            piezasss.grid(row=3,column=4)
+
+            componentesss=Button(registrosframe, text="COMPONENTES", command=lambda:mostrarframe(registrosframe), padx=14, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
+            componentesss.grid(row=3,column=5)
+
+
+            #-----------------LO DE CONSULTAS--------------------
+
+            
 
 
 
@@ -1187,8 +1303,8 @@ def main():
 
             label_menuframe=Label(menuframe)
             label_menuframe.grid(row=0,column=0)
-            label_consultasframe=Label(consultasframe)
-            label_consultasframe.grid(row=0,column=0)
+            
+            
             label_ayudaframe=Label(ayudaframe)
             label_ayudaframe.grid(row=0,column=0)
 
@@ -1213,16 +1329,16 @@ def main():
             vehiculos=Button(menuframe, text="VEHICULO", command=tablavehiculo, padx=17, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
             vehiculos.grid(row=3,column=1)
 
-            modelos=Button(menuframe, text="MODELO", command=tablamodelo, padx=17, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
+            modelos=Button(menuframe, text="MODELO", padx=17,command=tablamodelo, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
             modelos.grid(row=3,column=2)
 
-            marcas=Button(menuframe, text="MARCA", command=tablamarca, padx=17, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
+            marcas=Button(menuframe, text="MARCA", padx=17, pady=10,command=tablamarca, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
             marcas.grid(row=3,column=3)
 
-            piezass=Button(menuframe, text="PIEZAS", command=tablapiezas, padx=17, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
+            piezass=Button(menuframe, text="PIEZAS", padx=17, pady=10,command=tablapiezas,highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
             piezass.grid(row=3,column=4)
 
-            componentess=Button(menuframe, text="COMPONENTES", command=tablacomponentes, padx=14, pady=10, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
+            componentess=Button(menuframe, text="COMPONENTES", padx=14, pady=10,command=tablacomponentes, highlightthickness=0 , bg='#2a4e68',fg="white", relief="raised",font=('crushed', 20))
             componentess.grid(row=3,column=5)
 
 
@@ -1232,7 +1348,6 @@ def main():
 
 
             BarraSuperior=Menu(root)
-            BarraInferior=Menu(root)
 
             BarraSuperior.add_command(label="Inicio", command=iniciobtn)
             BarraSuperior.add_command(label="Tablas", command=lambda:mostrarframe(menuframe))
