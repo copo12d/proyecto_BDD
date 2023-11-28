@@ -6,26 +6,31 @@ from marca import Marca
 from modelo import Modelo
 from vehiculo import Vehiculo
 from componentes import Componentes
+
 class MyApp:
     def __init__(self, root):
-        self.db = Database("127.0.0.1", "root", "30412187", "mydb")  # Reemplaza con tus credenciales
+        self.db = Database(user='root', password='0704', host='127.0.0.1', database='proyecto2')  # Reemplaza con tus credenciales
         self.marca = Marca(self.db)
         self.pieza = Piezas(self.db)
         self.modelo = Modelo(self.db)
         self.vehiculo = Vehiculo(self.db)
         self.componente = Componentes(self.db)
 
+        self.espacio=tk.Label(root, text="  ").grid(row=0,column=0)
+
         self.marca_combobox = ttk.Combobox(root, state="readonly")
-        self.marca_combobox.pack()
+        self.marca_combobox.grid(row=1,column=0)
 
         self.modelo_combobox = ttk.Combobox(root, state="readonly")
-        self.modelo_combobox.pack()
+        self.modelo_combobox.grid(row=2,column=0)
 
         self.componente_combobox = ttk.Combobox(root, state="readonly")
-        self.componente_combobox.pack()
+        self.componente_combobox.grid(row=3,column=0)
 
-        self.resultados_text = tk.Text(root, height=10, width=50)
-        self.resultados_text.pack()
+        self.espacio2=tk.Label(root, text=" \n ").grid(row=4,column=0)
+
+        #self.resultados_text = tk.Text(root, height=10, width=50)
+        #self.resultados_text.grid(row=5,column=0)
 
         self.cargar_marcas()
         self.marca_combobox.bind("<<ComboboxSelected>>", self.cargar_modelos)
@@ -36,7 +41,7 @@ class MyApp:
         marcas = self.marca.get_all_marca_names()
         if marcas:
             self.marca_combobox['values'] = marcas
-            self.marca_combobox.current(0)  # Seleccionar el primer elemento por defecto
+            #self.marca_combobox.current(0)  # Seleccionar el primer elemento por defecto
 
     def cargar_modelos(self, event):
         marca_seleccionada = self.marca_combobox.get()

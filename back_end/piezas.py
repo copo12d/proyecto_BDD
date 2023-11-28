@@ -5,6 +5,7 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 import io
+from tkinter import messagebox
 
 class Piezas:
     def __init__(self, db):
@@ -110,5 +111,5 @@ class Piezas:
         with open(pdf_filename, "wb") as f:
             f.write(buffer.getvalue())
 
-        print(f"Se ha generado el archivo PDF: {pdf_filename}")
+        mensajito=messagebox.showinfo("SIUUUU",f"Se ha generado el archivo PDF: {pdf_filename}")
         

@@ -15,9 +15,9 @@ class Marca:
         self.db.commit()
 
     def delete(self, idMarca):
-         sql = "DELETE FROM marca WHERE idMarca = %s"
-         self.db.cursor.execute(sql, (idMarca,))
-         self.db.commit()
+        sql = "DELETE FROM marca WHERE idMarca = %s"
+        self.db.cursor.execute(sql, (idMarca,))
+        self.db.commit()
          
          
     def get_all_marca(self):
