@@ -37,7 +37,7 @@ def main():
 
             root.resizable(height=FALSE, width=FALSE)
             root.title("Grupo VAS System")
-            root.iconbitmap("C:/Users/carlo/OneDrive/Documents/GitHub/proyecto_BDD/back_end/logo.ico")
+            root.iconbitmap("logo.ico")
             image4=ImageTk.PhotoImage(Image.open("menu.jpg"))
             label_inicio=Label(root, image=image4)
             label_inicio.pack()
