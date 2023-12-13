@@ -321,6 +321,8 @@ def main():
 
                     def cancelarbtn():
                         global tabla
+                        idModeloentry.config(state=NORMAL)
+                        idMarcaentry.config(state=NORMAL)
                         idModeloentry.delete(0,END)
                         Nombre_Modeloentry.delete(0,END)
                         idMarcaentry.delete(0,END)
@@ -437,7 +439,7 @@ def main():
                     def editarbtn():
                         global tabla
                         id_piezasentry.config(state=NORMAL)
-                        id_Componenteentry.config(state=NORMAL)
+                        
                         Guardar.config(state=NORMAL)
                         id_piezasentry.delete(0,END)
                         nombre_piezaentry.delete(0,END)
@@ -463,7 +465,7 @@ def main():
                         id_Componenteentry.insert(0,idcomponentevalor)
 
                         id_piezasentry.config(state=DISABLED)
-                        id_Componenteentry.config(state=DISABLED)
+                        
                         
                         Nuevo.config(state=DISABLED)
                         Agregar.config(state=DISABLED)
@@ -480,10 +482,11 @@ def main():
                            
 
                     def guardarbtn():
+                        id_piezasentry.config(state=NORMAL)
                         borrarbtn()
                         agregarbtn()
-                        id_piezasentry.config(state=NORMAL)
-                        id_Componenteentry.config(state=NORMAL)
+                        
+
                         Guardar.config(state=NORMAL)
                         id_piezasentry.delete(0,END)
                         nombre_piezaentry.delete(0,END)
@@ -522,6 +525,7 @@ def main():
 
                     def cancelarbtn():
                         global tabla
+                        id_piezasentry.config(state=NORMAL)
                         id_piezasentry.delete(0,END)
                         nombre_piezaentry.delete(0,END)
                         estadoentry.delete(0,END)
@@ -740,6 +744,8 @@ def main():
 
                     def cancelarbtn():
                         global tabla
+                        idVehiculoentry.config(state=NORMAL)
+                        idModeloentry.config(state=NORMAL)
                         idVehiculoentry.delete(0,END)
                         Tipo_Vehiculoentry.delete(0,END)
                         idModeloentry.delete(0,END)
@@ -926,6 +932,7 @@ def main():
 
                     def cancelarbtn():
                         global tabla
+                        idMarcaentry.config(state=NORMAL)
                         idMarcaentry.delete(0,END)
                         Nombre_Marcaentry.delete(0,END)
                         tabla.selection_remove(tabla.selection())
@@ -1119,6 +1126,8 @@ def main():
 
                     def cancelarbtn():
                         global tabla
+                        idComponenteentry.config(state=NORMAL)
+                        idVehiculoentry.config(state=NORMAL)
                         idComponenteentry.delete(0,END)
                         Nombre_Componenteentry.delete(0,END)
                         idVehiculoentry.delete(0,END)
